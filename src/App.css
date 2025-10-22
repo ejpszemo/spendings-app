@@ -4,3 +4,175 @@
   padding: 2rem;
   text-align: center;
 }
+
+button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* app container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* global actions */
+.global-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* user selector */
+.user-selector {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.user-selector-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 30px;
+  border: 2px solid var(--pred-color, gray);
+  border-radius: 8px;
+  background-color: #E5F4E3;
+  color: #000;
+  font-weight: bold;
+  user-select: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #C8E6C9;
+    transition: all 0.3s ease;
+  }
+  &:has(.user-selector-radio:checked) {
+    background-color: var(--pred-color, gray);
+    color: #fff;
+  }
+}
+
+.user-selector-radio {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.user-selector-input {
+  width: 100px;
+  height: 30px;
+  padding: 0 0 0 5px;
+}
+
+/* spendings input */
+.spendings-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spendings-input-amount {
+  width: 100px;
+  height: 30px;
+  padding: 0 0 0 5px;
+}
+
+.spendings-input-description {
+  width: 200px;
+  height: 30px;
+  padding: 0 0 0 5px;
+}
+
+/* spendings list */
+.spendings-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spendings-list table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.spendings-list-username {
+  width: 100px;
+  text-align: center
+}
+
+.spendings-list-date {
+  width: 100px;
+}
+
+.spendings-list-amount {
+  background-color: var(--pred-color, gray);
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  padding: 0 5px 0 5px;
+  margin: 0 10px 0 10px;
+}
+
+.spendings-list-button-container {
+  width: 50px; /* 20px for each button + 5px right margin each */
+}
+.spendings-list-mini-button {
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.spendings-list-amount-input {
+  width: 50px;
+  height: 20px;
+  padding: 0 0 0 5px;
+}
+.spendings-list-description-input {
+  width: 100px;
+  height: 20px;
+  padding: 0 0 0 5px;
+}
+
+/* summary table */
+.summary-table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-table th {
+  width: 7rem;
+}
+
+.summary-table-username {
+  background-color: var(--pred-color, gray);
+  color: #fff;
+  padding: 0 5px 0 5px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  margin: 0 10px 0 10px;
+  user-select: none;
+}
+
+.summary-table-claims {
+  color: var(--claim-color, white)
+}

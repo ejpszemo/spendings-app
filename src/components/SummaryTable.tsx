@@ -1,0 +1,112 @@
+import { useMemo } from "react";
+import type { Spending, User } from "../types";
+import { formatCurrency } from "../utils/formatter";
+import { predefinedColors } from "../constants/colors";
+import { useLanguage } from "../contexts/LanguageContext";
+
+function SummaryTable({
+  spendings,
+  users,
+}: {
+  spendings: Spending[];
+  users: User[];
+}) {
+  const { t } = useLanguage();
+  const usersCount = users.length;
+  const usersDataMemo = useMemo(() => {
+    const countMap = spendings.reduce<Record<string, number>>(
+      (acc, spending) => {
+        acc[spending.userId] = (acc[spending.userId] || 0) + 1;
+        return acc;
+      },
+      {}
+    );
+    const unitSumMap = spendings.reduce<Record<string, number>>(
+      (acc, spending) => {
+        acc[spending.userId] = (acc[spending.userId] || 0) + spending.amount;
+        return acc;
+      },
+      {}
+    );
+    const sumValue = spendings.reduce((acc, spending) => {
+      return acc + spending.amount;
+    }, 0);
+    const divisionValue = usersCount > 0 ? sumValue / usersCount : 0;
+
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      claims: (unitSumMap[user.id] || 0) - divisionValue,
+      count: countMap[user.id] || 0,
+      unitSum: unitSumMap[user.id] || 0,
+      sum: sumValue || 0,
+      division: divisionValue || 0,
+    }));
+  }, [users, spendings]);
+
+  return (
+    <>
+      {spendings.length > 0 ? (
+        <div className="summary-table">
+          <table>
+            <thead>
+              <tr>
+                <th>{t.summary.user}</th>
+                <th>{t.summary.claims}</th>
+                <th>{t.summary.count}</th>
+                <th>{t.summary.unitSum}</th>
+                <th>{t.summary.sum}</th>
+                <th>{t.summary.division}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usersDataMemo.map((userMemo, index) => (
+                <tr key={userMemo.id}>
+                  <th
+                    className="summary-table-username"
+                    style={
+                      {
+                        "--pred-color":
+                          predefinedColors[
+                            users.findIndex((user) => user.id === userMemo.id)
+                          ],
+                      } as React.CSSProperties
+                    }
+                  >
+                    {userMemo.name}
+                  </th>
+                  <td
+                    className="summary-table-claims"
+                    style={
+                      {
+                        "--claim-color": userMemo.claims > 0 ? "green" : "red",
+                      } as React.CSSProperties
+                    }
+                  >
+                    {formatCurrency(userMemo.claims)}
+                  </td>
+                  <td>{userMemo.count}</td>
+                  <td>{formatCurrency(userMemo.unitSum)}</td>
+                  {index === 0 && (
+                    <>
+                      <td rowSpan={usersCount}>
+                        {formatCurrency(userMemo.sum)}
+                      </td>
+                      <td rowSpan={usersCount}>
+                        {formatCurrency(userMemo.division)}
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <> {usersCount > 0 && <p>{t.spending.nowAddSpending}</p>}</>
+      )}
+    </>
+  );
+}
+
+export default SummaryTable;
