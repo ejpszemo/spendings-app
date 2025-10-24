@@ -1,7 +1,7 @@
 import { useLanguage } from "../contexts/LanguageContext";
 
 function GlobalActions() {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage } = useLanguage();
 
   return (
     <div className="global-actions">
