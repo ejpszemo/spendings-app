@@ -151,6 +151,14 @@ button {
   padding: 0 0 0 5px;
 }
 
+.spendings-list-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 /* summary table */
 .summary-table {
   display: flex;

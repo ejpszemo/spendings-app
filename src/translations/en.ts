@@ -10,6 +10,7 @@ export const en = {
     amount: "amount...",
     description: "description...",
     filterByUser: "Filter by user",
+    filterByCurrency: "Filter by currency",
     firstAddUser: "First, add a user",
     nowAddSpending: "Now add some spendings",
     validSpendingAmount: "Enter a valid spending amount and make sure user is selected",

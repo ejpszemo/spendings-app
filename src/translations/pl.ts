@@ -12,6 +12,7 @@ export const pl: Translation = {
     amount: "kwota...",
     description: "opis...",
     filterByUser: "Filtruj według użytkownika",
+    filterByCurrency: "Filtruj według waluty",
     firstAddUser: "Najpierw dodaj użytkownika",
     nowAddSpending: "Teraz dodaj jakieś wydatki",
     validSpendingAmount: "Wprowadź poprawną kwotę i upewnij się, że użytkownik jest wybrany",

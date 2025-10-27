@@ -1,7 +1,7 @@
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
-import type { Spending, User } from "./types";
+import type { Rates, Spending, User } from "./types";
 import type { Language } from "./translations";
 import type { Currency } from "./currencies";
 import UserSelector from "./components/UserSelector";
@@ -19,6 +19,10 @@ function AppContent({
   setUsers,
   selectedUserId,
   setSelectedUserId,
+  selectedSpendingCurrency,
+  setSelectedSpendingCurrency,
+  rates,
+  setRates,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -26,12 +30,20 @@ function AppContent({
   setUsers: (users: User[]) => void;
   selectedUserId: string | null;
   setSelectedUserId: (id: string | null) => void;
+  selectedSpendingCurrency: Currency;
+  setSelectedSpendingCurrency: (currency: Currency) => void;
+  rates: Rates[];
+  setRates: (rates: Rates[]) => void;
 }) {
   const { t } = useLanguage();
 
   return (
     <div className="app-container">
-      <GlobalActions />
+      <GlobalActions
+        spendings={spendings}
+        setSpendings={setSpendings}
+        rates={rates}
+      />
       <h1>{t.app.title}</h1>
       <UserSelector
         spendings={spendings}
@@ -45,6 +57,10 @@ function AppContent({
         spendings={spendings}
         setSpendings={setSpendings}
         selectedUserId={selectedUserId}
+        selectedSpendingCurrency={selectedSpendingCurrency}
+        setSelectedSpendingCurrency={setSelectedSpendingCurrency}
+        rates={rates}
+        setRates={setRates}
       />
       {/* <SpendingsChart /> */}
       <SpendingsList
@@ -52,6 +68,7 @@ function AppContent({
         setSpendings={setSpendings}
         users={users}
         selectedUserId={selectedUserId}
+        selectedSpendingCurrency={selectedSpendingCurrency}
       />
       <SummaryTable spendings={spendings} users={users} />
     </div>
@@ -68,6 +85,8 @@ function App() {
     "spendingsApp_selectedUserId",
     null
   );
+  const [selectedSpendingCurrency, setSelectedSpendingCurrency] =
+    useLocalStorage<Currency>("spendingsApp_selectedCurrency", "usd");
   const [language, setLanguage] = useLocalStorage<Language>(
     "spendingsApp_language",
     "en"
@@ -76,6 +95,7 @@ function App() {
     "spendingsApp_currency",
     "usd"
   );
+  const [rates, setRates] = useLocalStorage<Rates[]>("spendingsApp_rates", []);
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
@@ -87,6 +107,10 @@ function App() {
           setUsers={setUsers}
           selectedUserId={selectedUserId}
           setSelectedUserId={setSelectedUserId}
+          selectedSpendingCurrency={selectedSpendingCurrency}
+          setSelectedSpendingCurrency={setSelectedSpendingCurrency}
+          rates={rates}
+          setRates={setRates}
         />
       </CurrencyProvider>
     </LanguageProvider>

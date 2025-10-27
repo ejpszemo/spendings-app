@@ -1,17 +1,29 @@
 import { useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
-import type { Spending } from "../types";
+import { useCurrency } from "../contexts/CurrencyContext";
+import useCurrencyApi from "../hooks/useCurrencyApi";
+import type { Rates, Spending } from "../types";
+import type { Currency } from "../currencies";
 
 function SpendingsInput({
   spendings,
   setSpendings,
   selectedUserId,
+  selectedSpendingCurrency,
+  setSelectedSpendingCurrency,
+  rates,
+  setRates,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
   selectedUserId: string | null;
+  selectedSpendingCurrency: Currency;
+  setSelectedSpendingCurrency: (currency: Currency) => void;
+  rates: Rates[];
+  setRates: (rates: Rates[]) => void;
 }) {
   const { t } = useLanguage();
+  const { currencyCode } = useCurrency();
   const [inputValue, setInputValue] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
@@ -25,22 +37,77 @@ function SpendingsInput({
       alert(t.spending.validSpendingAmount);
       return;
     }
-    const newSpending = {
-      id: crypto.randomUUID(),
-      amount: Number(inputValue),
-      description: description,
-      date: new Date().toISOString(),
-      userId: selectedUserId,
-    };
-    setInputValue("");
-    setDescription("");
-    setSpendings([...spendings, newSpending]);
+
+    try {
+      const newSpending = {
+        id: crypto.randomUUID(),
+        amount: Number(inputValue),
+        description: description,
+        date: new Date().toISOString(),
+        currency: selectedSpendingCurrency,
+        exchangedAmount: getExchangedAmount(),
+        userId: selectedUserId,
+      };
+      setInputValue("");
+      setDescription("");
+      setSpendings([...spendings, newSpending]);
+    } catch (error) {
+      console.error("Error adding spending:", error);
+      alert(
+        "Exchange rate not available. Please change currency and try again."
+      );
+    }
+  };
+  const handleSpendingCurrencyChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const newCurrency = e.target.value as Currency;
+    setSelectedSpendingCurrency(newCurrency);
+
+    try {
+      await useCurrencyApi(newCurrency, rates, setRates);
+    } catch (error) {
+      console.error("Failed to fetch exchange rates:", error);
+      alert("Failed to fetch exchange rates. Please try again.");
+    }
+  };
+  const getExchangedAmount = (): number => {
+    const targetCurrency = currencyCode.toLowerCase() as Currency;
+
+    if (selectedSpendingCurrency === targetCurrency) {
+      return Number(inputValue);
+    }
+
+    const exchangeRate = rates.find(
+      (rate) => rate.base === selectedSpendingCurrency
+    )?.exchangeRates[targetCurrency];
+
+    if (!exchangeRate) {
+      console.error("[SpendingsInput] Exchange rate not found", {
+        from: selectedSpendingCurrency,
+        to: targetCurrency,
+        availableRates: rates,
+      });
+      throw new Error("Exchange rate not found");
+    }
+
+    return Number(inputValue) * exchangeRate;
   };
 
   return (
     <>
       {selectedUserId ? (
         <form className="spendings-input" onSubmit={handleAddSpending}>
+          <select
+            name="currency"
+            value={selectedSpendingCurrency}
+            onChange={handleSpendingCurrencyChange}
+          >
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+            <option value="gbp">GBP</option>
+            <option value="pln">PLN</option>
+          </select>
           <input
             type="number"
             className="spendings-input-amount"

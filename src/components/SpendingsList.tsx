@@ -3,6 +3,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
 import { formatDate, formatCurrency } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
+import { localeMap, type Currency } from "../currencies";
 import type { Spending, User } from "../types";
 
 function SpendingsList({
@@ -10,15 +11,18 @@ function SpendingsList({
   setSpendings,
   users,
   selectedUserId,
+  selectedSpendingCurrency,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
   users: User[];
   selectedUserId: string | null;
+  selectedSpendingCurrency: Currency;
 }) {
   const { t, locale } = useLanguage();
   const { currencyCode, currencyLocale } = useCurrency();
   const [filterByUser, setFilterByUser] = useState<boolean>(false);
+  const [filterByCurrency, setFilterByCurrency] = useState<boolean>(false);
   const [editedSpendingId, setEditedSpendingId] = useState<string | null>(null);
   const [editInputValue, setEditInputValue] = useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
@@ -71,18 +75,33 @@ function SpendingsList({
     <>
       {spendings.length > 0 && (
         <div className="spendings-list">
-          <label>
-            <input
-              type="checkbox"
-              checked={filterByUser}
-              onChange={(e) => setFilterByUser(e.target.checked)}
-            />
-            <span>{t.spending.filterByUser}</span>
-          </label>
+          <div className="spendings-list-filters">
+            <label>
+              <input
+                type="checkbox"
+                checked={filterByUser}
+                onChange={(e) => setFilterByUser(e.target.checked)}
+              />
+              <span>{t.spending.filterByUser}</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filterByCurrency}
+                onChange={(e) => setFilterByCurrency(e.target.checked)}
+              />
+              <span>{t.spending.filterByCurrency}</span>
+            </label>
+          </div>
           <ol>
             {spendings
               .filter((spending) =>
                 filterByUser ? spending.userId === selectedUserId : true
+              )
+              .filter((spending) =>
+                filterByCurrency
+                  ? spending.currency === selectedSpendingCurrency
+                  : true
               )
               .map((spending) => {
                 const userData = usersDataMemo.get(spending.userId);
@@ -125,6 +144,11 @@ function SpendingsList({
                             ) : (
                               <span
                                 className="spendings-list-amount"
+                                title={formatCurrency(
+                                  spending.exchangedAmount,
+                                  currencyCode,
+                                  currencyLocale
+                                )}
                                 style={
                                   {
                                     "--pred-color": userData?.color,
@@ -133,8 +157,8 @@ function SpendingsList({
                               >
                                 {formatCurrency(
                                   spending.amount,
-                                  currencyCode,
-                                  currencyLocale
+                                  spending.currency,
+                                  localeMap[spending.currency]
                                 )}{" "}
                                 {spending.description}
                               </span>

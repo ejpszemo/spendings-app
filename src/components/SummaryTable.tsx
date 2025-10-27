@@ -25,13 +25,15 @@ function SummaryTable({
     );
     const unitSumMap = spendings.reduce<Record<string, number>>(
       (acc, spending) => {
-        acc[spending.userId] = (acc[spending.userId] || 0) + spending.amount;
+        acc[spending.userId] =
+          (acc[spending.userId] || 0) + spending.exchangedAmount;
         return acc;
+        // pass filter by currency here and change spending.amount with exchangedAmount
       },
       {}
     );
     const sumValue = spendings.reduce((acc, spending) => {
-      return acc + spending.amount;
+      return acc + spending.exchangedAmount;
     }, 0);
     const divisionValue = usersCount > 0 ? sumValue / usersCount : 0;
 
