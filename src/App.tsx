@@ -1,7 +1,9 @@
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
+import { CurrencyProvider } from "./contexts/CurrencyContext";
 import type { Spending, User } from "./types";
 import type { Language } from "./translations";
+import type { Currency } from "./currencies";
 import UserSelector from "./components/UserSelector";
 import SpendingsInput from "./components/SpendingsInput";
 // import SpendingsChart from "./components/SpendingsChart";
@@ -70,17 +72,23 @@ function App() {
     "spendingsApp_language",
     "en"
   );
+  const [currency, setCurrency] = useLocalStorage<Currency>(
+    "spendingsApp_currency",
+    "usd"
+  );
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <AppContent
-        spendings={spendings}
-        setSpendings={setSpendings}
-        users={users}
-        setUsers={setUsers}
-        selectedUserId={selectedUserId}
-        setSelectedUserId={setSelectedUserId}
-      />
+      <CurrencyProvider currency={currency} setCurrency={setCurrency}>
+        <AppContent
+          spendings={spendings}
+          setSpendings={setSpendings}
+          users={users}
+          setUsers={setUsers}
+          selectedUserId={selectedUserId}
+          setSelectedUserId={setSelectedUserId}
+        />
+      </CurrencyProvider>
     </LanguageProvider>
   );
 }

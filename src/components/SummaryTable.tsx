@@ -3,6 +3,7 @@ import type { Spending, User } from "../types";
 import { formatCurrency } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useCurrency } from "../contexts/CurrencyContext";
 
 function SummaryTable({
   spendings,
@@ -12,6 +13,7 @@ function SummaryTable({
   users: User[];
 }) {
   const { t } = useLanguage();
+  const { currencyCode, currencyLocale } = useCurrency();
   const usersCount = users.length;
   const usersDataMemo = useMemo(() => {
     const countMap = spendings.reduce<Record<string, number>>(
@@ -83,17 +85,35 @@ function SummaryTable({
                       } as React.CSSProperties
                     }
                   >
-                    {formatCurrency(userMemo.claims)}
+                    {formatCurrency(
+                      userMemo.claims,
+                      currencyCode,
+                      currencyLocale
+                    )}
                   </td>
                   <td>{userMemo.count}</td>
-                  <td>{formatCurrency(userMemo.unitSum)}</td>
+                  <td>
+                    {formatCurrency(
+                      userMemo.unitSum,
+                      currencyCode,
+                      currencyLocale
+                    )}
+                  </td>
                   {index === 0 && (
                     <>
                       <td rowSpan={usersCount}>
-                        {formatCurrency(userMemo.sum)}
+                        {formatCurrency(
+                          userMemo.sum,
+                          currencyCode,
+                          currencyLocale
+                        )}
                       </td>
                       <td rowSpan={usersCount}>
-                        {formatCurrency(userMemo.division)}
+                        {formatCurrency(
+                          userMemo.division,
+                          currencyCode,
+                          currencyLocale
+                        )}
                       </td>
                     </>
                   )}

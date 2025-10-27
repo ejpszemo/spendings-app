@@ -4,7 +4,9 @@ export const formatDate = (date: Date, locale: string = "en-US"): string => {
   }).format(date);
 };
 
-export const formatCurrency = new Intl.NumberFormat("pl-PL", {
-  style: "currency",
-  currency: "PLN",
-}).format;
+export const formatCurrency = (amount: number, name: string = "USD", locale: string = "en-US"): string => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: name,
+  }).format(amount);
+};

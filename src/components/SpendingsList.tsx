@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useCurrency } from "../contexts/CurrencyContext";
 import { formatDate, formatCurrency } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
 import type { Spending, User } from "../types";
@@ -16,6 +17,7 @@ function SpendingsList({
   selectedUserId: string | null;
 }) {
   const { t, locale } = useLanguage();
+  const { currencyCode, currencyLocale } = useCurrency();
   const [filterByUser, setFilterByUser] = useState<boolean>(false);
   const [editedSpendingId, setEditedSpendingId] = useState<string | null>(null);
   const [editInputValue, setEditInputValue] = useState<string>("");
@@ -129,7 +131,11 @@ function SpendingsList({
                                   } as React.CSSProperties
                                 }
                               >
-                                {formatCurrency(spending.amount)}{" "}
+                                {formatCurrency(
+                                  spending.amount,
+                                  currencyCode,
+                                  currencyLocale
+                                )}{" "}
                                 {spending.description}
                               </span>
                             )}
