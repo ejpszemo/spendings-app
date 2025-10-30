@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
+import useCurrencyApi from "./hooks/useCurrencyApi";
 import type { Rates, Spending, User } from "./types";
 import type { Language } from "./translations";
 import type { Currency } from "./currencies";
@@ -96,6 +98,26 @@ function App() {
     "usd"
   );
   const [rates, setRates] = useLocalStorage<Rates[]>("spendingsApp_rates", []);
+
+  // Fetch initial exchange rates on first app load
+  useEffect(() => {
+    const fetchInitialRates = async () => {
+      // Only fetch if rates are empty (first time loading the app)
+      if (rates.length > 0) return;
+
+      // const currencies: Currency[] = ["usd", "eur", "gbp", "pln"];
+      const defaultCurrency = "usd" as Currency;
+
+      try {
+        // Fetch rates for all currencies
+        await useCurrencyApi(defaultCurrency, rates, setRates);
+      } catch (error) {
+        console.error("Failed to fetch initial exchange rate for USD:", error);
+      }
+    };
+
+    fetchInitialRates();
+  }, []);
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
