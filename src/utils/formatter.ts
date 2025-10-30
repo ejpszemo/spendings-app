@@ -1,6 +1,7 @@
-export const formatDate = (date: Date, locale: string = "en-US"): string => {
+export const formatDate = (date: Date, locale: string = "en-US", dateStyle: "full" | "long" | "medium" | "short" = "medium", showTime: boolean = false, timeStyle: "full" | "long" | "medium" | "short" = "medium"): string => {
   return new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
+    dateStyle: dateStyle,
+    timeStyle: showTime ? timeStyle : undefined,
   }).format(date);
 };
 

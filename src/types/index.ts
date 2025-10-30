@@ -18,4 +18,5 @@ export interface User {
 export interface Rates {
   base: Currency;
   exchangeRates: Record<Currency, number>;
+  fetchedAt: Date;
 }

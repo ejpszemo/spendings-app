@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
+import { formatDate } from "../utils/formatter";
 import useCurrencyApi from "../hooks/useCurrencyApi";
 import type { Rates, Spending } from "../types";
 import type { Currency } from "../currencies";
@@ -22,7 +23,7 @@ function SpendingsInput({
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
 }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { currencyCode } = useCurrency();
   const [inputValue, setInputValue] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -64,6 +65,10 @@ function SpendingsInput({
     const newCurrency = e.target.value as Currency;
     setSelectedSpendingCurrency(newCurrency);
 
+    if (rates.find((rate) => rate.base === newCurrency)) {
+      return;
+    }
+
     try {
       await useCurrencyApi(newCurrency, rates, setRates);
     } catch (error) {
@@ -94,39 +99,71 @@ function SpendingsInput({
     return Number(inputValue) * exchangeRate;
   };
 
+  const handleRatesUpdate = async () => {
+    try {
+      await useCurrencyApi(selectedSpendingCurrency, rates, setRates);
+    } catch (error) {
+      console.error("Failed to fetch exchange rates:", error);
+      alert("Failed to fetch exchange rates. Please try again.");
+    }
+  };
+
+  const getLastRatesUpdate = (): string => {
+    const lastUpdate = rates.find(
+      (rate) => rate.base === selectedSpendingCurrency
+    )?.fetchedAt;
+    return lastUpdate
+      ? formatDate(new Date(lastUpdate), locale, "short", true, "medium")
+      : "Never";
+  };
+
   return (
     <>
       {selectedUserId ? (
-        <form className="spendings-input" onSubmit={handleAddSpending}>
-          <select
-            name="currency"
-            value={selectedSpendingCurrency}
-            onChange={handleSpendingCurrencyChange}
-          >
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="gbp">GBP</option>
-            <option value="pln">PLN</option>
-          </select>
-          <input
-            type="number"
-            className="spendings-input-amount"
-            placeholder={t.spending.amount}
-            min="0"
-            disabled={selectedUserId === null}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <input
-            type="text"
-            className="spendings-input-description"
-            placeholder={t.spending.description}
-            disabled={selectedUserId === null}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button type="submit">➕</button>
-        </form>
+        <>
+          <div className="spendings-input-last-updated">
+            <button
+              className="spendings-input-mini-button"
+              onClick={handleRatesUpdate}
+            >
+              🔄️
+            </button>
+            <span className="spendings-input-last-updated-text">
+              Last {selectedSpendingCurrency.toUpperCase()} rates update:{" "}
+              {getLastRatesUpdate()}
+            </span>
+          </div>
+          <form className="spendings-input" onSubmit={handleAddSpending}>
+            <select
+              name="currency"
+              value={selectedSpendingCurrency}
+              onChange={handleSpendingCurrencyChange}
+            >
+              <option value="usd">USD</option>
+              <option value="eur">EUR</option>
+              <option value="gbp">GBP</option>
+              <option value="pln">PLN</option>
+            </select>
+            <input
+              type="number"
+              className="spendings-input-amount"
+              placeholder={t.spending.amount}
+              min="0"
+              disabled={selectedUserId === null}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <input
+              type="text"
+              className="spendings-input-description"
+              placeholder={t.spending.description}
+              disabled={selectedUserId === null}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button type="submit">➕</button>
+          </form>
+        </>
       ) : (
         <p>{t.spending.firstAddUser}</p>
       )}

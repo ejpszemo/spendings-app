@@ -22,7 +22,7 @@ export default async function useCurrencyApi(
     const data = await convertCurrency(from);
     const ratesToSave = destructure(data);
     const filtered = rates.filter((rate: Rates) => rate.base !== from);
-    setRates([...filtered, { base: from, exchangeRates: ratesToSave }]);
+    setRates([...filtered, { base: from, exchangeRates: ratesToSave, fetchedAt: new Date() }]);
   } catch (error) {
     console.error("Error fetching currency rates:", error);
     throw error;
