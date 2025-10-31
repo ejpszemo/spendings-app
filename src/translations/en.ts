@@ -3,6 +3,9 @@ export const en = {
     title: "Spendings App",
     removeUserConfirmation: "Are you sure you want to remove this user? \nAll spendings assigned to this user will be removed as well.",
     clearSpendingsConfirmation: "Are you sure you want to clear all local data? \nThis action cannot be undone.",
+    targetCurrency: "Target currency:",
+    language: "Language:",
+    clearData: "Clear data:",
   },
   user: {
     userName: "user name...",

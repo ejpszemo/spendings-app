@@ -5,6 +5,9 @@ export const pl: Translation = {
     title: "Aplikacja do Wydatków",
     removeUserConfirmation: "Czy na pewno chcesz usunąć tego użytkownika? \nWszystkie wydatki przypisane do tego użytkownika zostaną z nim usunięte.",
     clearSpendingsConfirmation: "Czy na pewno chcesz wyczyścić wszystkie dane lokalne? \nTa akcja nie może zostać cofnięta.",
+    targetCurrency: "Waluta docelowa:",
+    language: "Język:",
+    clearData: "Wyczyść dane:",
   },
   user: {
     userName: "imię...",

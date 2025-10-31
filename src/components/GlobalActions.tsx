@@ -91,6 +91,7 @@ function GlobalActions({
 
   return (
     <div className="global-actions">
+      <span className="global-actions-mini-text">{t.app.language}</span>
       <select
         name="language"
         value={language}
@@ -99,12 +100,14 @@ function GlobalActions({
         <option value="en">English</option>
         <option value="pl">Polski</option>
       </select>
+      <span className="global-actions-mini-text">{t.app.targetCurrency}</span>
       <select name="currency" value={currency} onChange={handleCurrencyChange}>
         <option value="usd">USD</option>
         <option value="eur">EUR</option>
         <option value="gbp">GBP</option>
         <option value="pln">PLN</option>
       </select>
+      <span className="global-actions-mini-text">{t.app.clearData}</span>
       <button
         className="global-actions-mini-button"
         onClick={handleClearSpendings}

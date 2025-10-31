@@ -57,10 +57,14 @@ function SummaryTable({
               <tr>
                 <th>{t.summary.user}</th>
                 <th>{t.summary.claims}</th>
-                <th>{t.summary.count}</th>
+                <th className="summary-table-hide-on-mobile">
+                  {t.summary.count}
+                </th>
                 <th>{t.summary.unitSum}</th>
                 <th>{t.summary.sum}</th>
-                <th>{t.summary.division}</th>
+                <th className="summary-table-hide-on-mobile">
+                  {t.summary.division}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -93,7 +97,9 @@ function SummaryTable({
                       currencyLocale
                     )}
                   </td>
-                  <td>{userMemo.count}</td>
+                  <td className="summary-table-hide-on-mobile">
+                    {userMemo.count}
+                  </td>
                   <td>
                     {formatCurrency(
                       userMemo.unitSum,
@@ -110,7 +116,10 @@ function SummaryTable({
                           currencyLocale
                         )}
                       </td>
-                      <td rowSpan={usersCount}>
+                      <td
+                        className="summary-table-hide-on-mobile"
+                        rowSpan={usersCount}
+                      >
                         {formatCurrency(
                           userMemo.division,
                           currencyCode,

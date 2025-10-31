@@ -1,3 +1,4 @@
+// length: 20 - defines maximum number of users that can be added
 export const predefinedColors = [
   '#4caf50', // leaf green
   '#2196f2', // sky blue
