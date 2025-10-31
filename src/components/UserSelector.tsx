@@ -76,6 +76,7 @@ function UserSelector({
             className="user-selector-input"
             placeholder={t.user.userName}
             autoFocus
+            maxLength={15}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
@@ -83,7 +84,12 @@ function UserSelector({
         </>
       ) : (
         <>
-          <button onClick={() => setAddingUser(true)}>➕</button>
+          <button
+            disabled={users.length >= predefinedColors.length}
+            onClick={() => setAddingUser(true)}
+          >
+            ➕
+          </button>
           <button
             onClick={() => handleRemoveUser()}
             disabled={users.length <= 0}

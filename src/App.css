@@ -5,12 +5,36 @@
   text-align: center;
 }
 
+/* https://stackoverflow.com/a/60660207 - tooltips for touch devices */
+@media (pointer: coarse), (hover: none) {
+  [title] {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+  }
+  [title]:focus::after {
+    content: attr(title);
+    position: absolute;
+    top: 90%;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid;
+    width: fit-content;
+    padding: 3px;
+    font-size: 10px;
+    z-index: 1;
+  }
+}
+
 button {
   width: 30px;
   height: 30px;
   padding: 0;
   user-select: none;
   cursor: pointer;
+}
+h1, th {
+  user-select: none;
 }
 
 /* app container */
@@ -37,12 +61,18 @@ button {
   height: 20px;
 }
 
+.global-actions-mini-text {
+  font-size: 12px;
+  user-select: none;
+}
+
 /* user selector */
 .user-selector {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -51,8 +81,9 @@ button {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100px;
+  width: fit-content;
   height: 30px;
+  padding: 0 10px 0 10px;
   border: 2px solid var(--pred-color, gray);
   border-radius: 8px;
   background-color: #E5F4E3;
@@ -91,6 +122,11 @@ button {
   justify-content: center;
   gap: 0.5rem;
 }
+@media (max-width: 768px) {
+  .spendings-input {
+    flex-direction: column;
+  }
+}
 
 .spendings-input-amount {
   width: 100px;
@@ -123,8 +159,20 @@ button {
 }
 
 /* spendings list */
-.spendings-list {
+.spendings-list-expand {
+  font-size: 0; /* weird margin-top fix */
+}
+.spendings-list-expand button {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 100%;
+  font-size: 12px;
+  padding: 0 5px 0 5px;
+}
+.spendings-list {
+  display: var(--expanded, none);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -138,11 +186,21 @@ button {
 
 .spendings-list-username {
   width: 100px;
-  text-align: center
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .spendings-list-username {
+    width: 70px;
+  }
 }
 
 .spendings-list-date {
   width: 100px;
+}
+@media (max-width: 768px) {
+  .spendings-list-date {
+    width: 50px;
+  }
 }
 
 .spendings-list-amount {
@@ -182,6 +240,16 @@ button {
   justify-content: center;
   gap: 1rem;
 }
+@media (max-width: 768px) {
+  .spendings-list-filters {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.spendings-list-filters {
+  user-select: none;
+}
 
 /* summary table */
 .summary-table {
@@ -207,4 +275,10 @@ button {
 
 .summary-table-claims {
   color: var(--claim-color, white)
+}
+
+@media (max-width: 768px) {
+  .summary-table-hide-on-mobile {
+    display: none;
+  }
 }
