@@ -13,7 +13,7 @@ function GlobalActions({
   setSpendings: (spendings: Spending[]) => void;
   rates: Rates[];
 }) {
-  const { language, setLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { currency, setCurrency } = useCurrency();
 
   const handleCurrencyChange = async (
@@ -69,6 +69,26 @@ function GlobalActions({
     return Number(spending.amount) * exchangeRate;
   };
 
+  const handleClearSpendings = () => {
+    const removeItemsByPrefix = (prefix: string) => {
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; ++i) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(prefix)) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach((key) => {
+        localStorage.removeItem(key);
+      });
+    };
+
+    if (confirm(t.app.clearSpendingsConfirmation)) {
+      removeItemsByPrefix("spendingsApp_");
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="global-actions">
       <select
@@ -85,6 +105,12 @@ function GlobalActions({
         <option value="gbp">GBP</option>
         <option value="pln">PLN</option>
       </select>
+      <button
+        className="global-actions-mini-button"
+        onClick={handleClearSpendings}
+      >
+        🚫
+      </button>
     </div>
   );
 }

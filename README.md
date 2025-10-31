@@ -80,6 +80,14 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Spending Currency**: Each expense can be added in any currency independently
 - All preferences are saved automatically and persist across sessions
 
+### Managing Data
+
+- **Clear All Data**: Click the 🚫 button in the top right to clear all local data
+  - This removes all spendings, users, settings, and cached exchange rates
+  - A confirmation dialog will appear before clearing
+  - It may come in handy if I mess things up between commits
+  - This action cannot be undone
+
 ## 📝 TODO / Future Enhancements
 
 ### High Priority
@@ -113,4 +121,4 @@ ejpszemo - [@ejpszemo](https://github.com/ejpszemo)
 
 ---
 
-**Note**: All data is stored locally in your browser. Clearing your browser data will erase all spendings and users.
+**Note**: All data is stored locally in your browser using localStorage. Use the 🚫 button to clear app data, or clearing your browser data will also erase all spendings and users.

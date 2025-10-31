@@ -129,7 +129,9 @@ function SpendingsInput({
               🔄️
             </button>
             <span className="spendings-input-last-updated-text">
-              Last {selectedSpendingCurrency.toUpperCase()} rates update:{" "}
+              {t.spending.lastRatesUpdate(
+                selectedSpendingCurrency.toUpperCase()
+              )}{" "}
               {getLastRatesUpdate()}
             </span>
           </div>

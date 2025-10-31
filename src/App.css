@@ -31,6 +31,12 @@ button {
   gap: 0.5rem;
 }
 
+.global-actions-mini-button {
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+}
+
 /* user selector */
 .user-selector {
   display: flex;
