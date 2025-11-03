@@ -71,6 +71,7 @@ function AppContent({
         users={users}
         selectedUserId={selectedUserId}
         selectedSpendingCurrency={selectedSpendingCurrency}
+        rates={rates}
       />
       <SummaryTable spendings={spendings} users={users} />
     </div>

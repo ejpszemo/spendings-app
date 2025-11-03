@@ -4,7 +4,7 @@ import { useCurrency } from "../contexts/CurrencyContext";
 import { formatDate, formatCurrency } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
 import { localeMap, type Currency } from "../currencies";
-import type { Spending, User } from "../types";
+import type { Spending, User, Rates } from "../types";
 
 function SpendingsList({
   spendings,
@@ -12,12 +12,14 @@ function SpendingsList({
   users,
   selectedUserId,
   selectedSpendingCurrency,
+  rates,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
   users: User[];
   selectedUserId: string | null;
   selectedSpendingCurrency: Currency;
+  rates: Rates[];
 }) {
   const { t, locale } = useLanguage();
   const { currencyCode, currencyLocale } = useCurrency();
@@ -56,6 +58,7 @@ function SpendingsList({
               ...spending,
               amount: Number(editInputValue),
               description: editDescription,
+              exchangedAmount: getExchangedAmount(spending.currency),
             }
           : spending
       )
@@ -69,6 +72,28 @@ function SpendingsList({
       (spending) => spending.id !== id
     );
     setSpendings(filteredSpendings);
+  };
+
+  const getExchangedAmount = (spendingCurrency: Currency): number => {
+    const targetCurrency = currencyCode.toLowerCase() as Currency;
+
+    if (spendingCurrency === targetCurrency) {
+      return Number(editInputValue);
+    }
+
+    const exchangeRate = rates.find((rate) => rate.base === spendingCurrency)
+      ?.exchangeRates[targetCurrency];
+
+    if (!exchangeRate) {
+      console.error("[SpendingsList] Exchange rate not found", {
+        from: spendingCurrency,
+        to: targetCurrency,
+        availableRates: rates,
+      });
+      throw new Error("Exchange rate not found");
+    }
+
+    return Number(editInputValue) * exchangeRate;
   };
 
   return (
