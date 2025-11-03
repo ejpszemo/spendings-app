@@ -61,7 +61,7 @@ button {
   user-select: none;
   cursor: pointer;
   &:hover {
-    background-color: #C8E6C9;
+    background-color: var(--pred-color, gray);
     transition: all 0.3s ease;
   }
   &:has(.user-selector-radio:checked) {
