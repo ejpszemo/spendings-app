@@ -44,7 +44,11 @@ function AppContent({
       <GlobalActions
         spendings={spendings}
         setSpendings={setSpendings}
+        users={users}
+        setUsers={setUsers}
         rates={rates}
+        setRates={setRates}
+        setSelectedUserId={setSelectedUserId}
       />
       <h1>{t.app.title}</h1>
       <UserSelector

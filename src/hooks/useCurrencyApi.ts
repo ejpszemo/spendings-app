@@ -1,4 +1,5 @@
 import type { Rates } from "../types";
+import type { Currency } from "../currencies";
 
 async function convertCurrency(from: string) {
   const res = await fetch(
@@ -13,6 +14,29 @@ async function convertCurrency(from: string) {
   return data;
 }
 
+const destructure = (data: any) => {
+  const { rates } = data;
+  const { USD, EUR, GBP, PLN } = rates;
+  return {
+    usd: USD,
+    eur: EUR,
+    gbp: GBP,
+    pln: PLN,
+  };
+};
+
+// Export a function that fetches and returns rates without setting state
+export async function fetchCurrencyRates(from: Currency): Promise<Rates> {
+  const data = await convertCurrency(from);
+  const ratesToSave = destructure(data);
+  return { 
+    base: from, 
+    exchangeRates: ratesToSave, 
+    fetchedAt: new Date() 
+  };
+}
+
+// Keep the original function for backward compatibility
 export default async function useCurrencyApi(
   from: string,
   rates: Rates[],
@@ -28,14 +52,3 @@ export default async function useCurrencyApi(
     throw error;
   }
 }
-
-const destructure = (data: any) => {
-  const { rates } = data;
-  const { USD, EUR, GBP, PLN } = rates;
-  return {
-    usd: USD,
-    eur: EUR,
-    gbp: GBP,
-    pln: PLN,
-  };
-};
