@@ -2,6 +2,9 @@ import { useState } from "react";
 import { predefinedColors } from "../constants/colors";
 import { useLanguage } from "../contexts/LanguageContext";
 import type { User, Spending } from "../types";
+import AddIcon from "../assets/icons/add.svg?react";
+import RemoveIcon from "../assets/icons/remove.svg?react";
+import SaveIcon from "../assets/icons/save.svg?react";
 
 function UserSelector({
   spendings,
@@ -80,7 +83,9 @@ function UserSelector({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <button type="submit">💾</button>
+          <button type="submit">
+            <SaveIcon className="standard-icon" />
+          </button>
         </>
       ) : (
         <>
@@ -88,13 +93,13 @@ function UserSelector({
             disabled={users.length >= predefinedColors.length}
             onClick={() => setAddingUser(true)}
           >
-            ➕
+            <AddIcon className="standard-icon" />
           </button>
           <button
             onClick={() => handleRemoveUser()}
             disabled={users.length <= 0}
           >
-            ➖
+            <RemoveIcon className="standard-icon" />
           </button>
         </>
       )}

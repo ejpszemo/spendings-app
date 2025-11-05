@@ -5,6 +5,9 @@ import { fetchCurrencyRates } from "../hooks/useCurrencyApi";
 import type { Language } from "../translations";
 import type { Currency } from "../currencies";
 import type { Rates, Spending, User } from "../types";
+import ExportIcon from "../assets/icons/export.svg?react";
+import ImportIcon from "../assets/icons/import.svg?react";
+import ClearIcon from "../assets/icons/clear.svg?react";
 
 function GlobalActions({
   spendings,
@@ -206,7 +209,7 @@ function GlobalActions({
           className="global-actions-mini-button"
           onClick={handleExportData}
         >
-          {`📊 ${t.app.exportData}`}
+          <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
         </button>
         <label htmlFor="file-upload" className="global-actions-input-label">
           <input
@@ -215,13 +218,13 @@ function GlobalActions({
             accept=".json"
             onChange={handleImportData}
           />
-          {`📤 ${t.app.importData}`}
+          <ImportIcon className="standard-mini-icon" /> {t.app.importData}
         </label>
         <button
           className="global-actions-mini-button"
           onClick={handleClearSpendings}
         >
-          {`🚫 ${t.app.clearData}`}
+          <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
         </button>
       </div>
       <div className="global-actions-contexts">

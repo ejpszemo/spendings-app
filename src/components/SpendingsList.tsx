@@ -5,6 +5,11 @@ import { formatDate, formatCurrency } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
 import { localeMap, type Currency } from "../currencies";
 import type { Spending, User, Rates } from "../types";
+import EditIcon from "../assets/icons/edit.svg?react";
+import RemoveIcon from "../assets/icons/remove.svg?react";
+import SaveIcon from "../assets/icons/save.svg?react";
+import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
+import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 
 function SpendingsList({
   spendings,
@@ -110,21 +115,23 @@ function SpendingsList({
             }
           >
             <div className="spendings-list-filters">
-              <label>
+              <label className="spendings-list-filter-label">
                 <input
                   type="checkbox"
                   checked={filterByUser}
                   onChange={(e) => setFilterByUser(e.target.checked)}
                 />
-                <span>{t.spending.filterByUser}</span>
+                <span className="spendings-list-filter-checkmark"></span>
+                {t.spending.filterByUser}
               </label>
-              <label>
+              <label className="spendings-list-filter-label">
                 <input
                   type="checkbox"
                   checked={filterByCurrency}
                   onChange={(e) => setFilterByCurrency(e.target.checked)}
                 />
-                <span>{t.spending.filterByCurrency}</span>
+                <span className="spendings-list-filter-checkmark"></span>
+                {t.spending.filterByCurrency}
               </label>
             </div>
             <ol>
@@ -155,6 +162,7 @@ function SpendingsList({
                                     <input
                                       type="number"
                                       className="spendings-list-amount-input"
+                                      placeholder={t.spending.amount}
                                       min="0"
                                       value={editInputValue}
                                       onChange={(e) =>
@@ -164,6 +172,7 @@ function SpendingsList({
                                     <input
                                       type="text"
                                       className="spendings-list-description-input"
+                                      placeholder={t.spending.description}
                                       value={editDescription}
                                       onChange={(e) =>
                                         setEditDescription(e.target.value)
@@ -206,7 +215,7 @@ function SpendingsList({
                                   onClick={handleSaveEditedSpending}
                                   className="spendings-list-mini-button"
                                 >
-                                  💾
+                                  <SaveIcon className="standard-mini-icon" />
                                 </button>
                               ) : (
                                 <>
@@ -216,7 +225,7 @@ function SpendingsList({
                                     }
                                     className="spendings-list-mini-button"
                                   >
-                                    ✏️
+                                    <EditIcon className="standard-mini-icon" />
                                   </button>
                                   <button
                                     onClick={() =>
@@ -224,7 +233,7 @@ function SpendingsList({
                                     }
                                     className="spendings-list-mini-button"
                                   >
-                                    ➖
+                                    <RemoveIcon className="standard-mini-icon" />
                                   </button>
                                 </>
                               )}
@@ -242,9 +251,17 @@ function SpendingsList({
           </div>
           <div className="spendings-list-expand">
             <button onClick={() => setExpanded((prev) => !prev)}>
-              {expanded
-                ? `🔼 ${t.spending.collapse}`
-                : `▶️ ${t.spending.expand}`}
+              {expanded ? (
+                <>
+                  <ArrowUpIcon className="standard-mini-icon" />{" "}
+                  {t.spending.collapse}
+                </>
+              ) : (
+                <>
+                  <ArrowDownIcon className="standard-mini-icon" />{" "}
+                  {t.spending.expand}
+                </>
+              )}
             </button>
           </div>
         </>

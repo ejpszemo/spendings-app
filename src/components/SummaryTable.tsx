@@ -87,7 +87,10 @@ function SummaryTable({
                     className="summary-table-claims"
                     style={
                       {
-                        "--claim-color": userMemo.claims > 0 ? "green" : "red",
+                        "--claim-color":
+                          userMemo.claims > 0
+                            ? "var(--positive-color)"
+                            : "var(--negative-color)",
                       } as React.CSSProperties
                     }
                   >

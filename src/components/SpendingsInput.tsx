@@ -5,6 +5,8 @@ import { formatDate } from "../utils/formatter";
 import useCurrencyApi from "../hooks/useCurrencyApi";
 import type { Rates, Spending } from "../types";
 import type { Currency } from "../currencies";
+import AddIcon from "../assets/icons/add.svg?react";
+import RefreshIcon from "../assets/icons/refresh.svg?react";
 
 function SpendingsInput({
   spendings,
@@ -126,7 +128,7 @@ function SpendingsInput({
               className="spendings-input-mini-button"
               onClick={handleRatesUpdate}
             >
-              🔄️
+              <RefreshIcon className="standard-mini-icon" />
             </button>
             <span className="spendings-input-last-updated-text">
               {t.spending.lastRatesUpdate(
@@ -163,7 +165,9 @@ function SpendingsInput({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <button type="submit">➕</button>
+            <button type="submit">
+              <AddIcon className="standard-icon" />
+            </button>
           </form>
         </>
       ) : (
