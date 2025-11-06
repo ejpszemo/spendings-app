@@ -50,7 +50,9 @@ function AppContent({
         setRates={setRates}
         setSelectedUserId={setSelectedUserId}
       />
-      <h1>{t.app.title}</h1>
+      <div className="app-title-container">
+        <h1>{t.app.title}</h1>
+      </div>
       <UserSelector
         spendings={spendings}
         setSpendings={setSpendings}

@@ -120,7 +120,7 @@ function SpendingsInput({
   };
 
   return (
-    <>
+    <div className="spendings-input-container">
       {selectedUserId ? (
         <>
           <div className="spendings-input-last-updated">
@@ -173,7 +173,7 @@ function SpendingsInput({
       ) : (
         <p>{t.spending.firstAddUser}</p>
       )}
-    </>
+    </div>
   );
 }
 

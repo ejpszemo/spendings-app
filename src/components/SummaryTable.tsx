@@ -49,9 +49,16 @@ function SummaryTable({
   }, [users, spendings]);
 
   return (
-    <>
-      {spendings.length > 0 ? (
-        <div className="summary-table">
+    <div
+      className="summary-table-container"
+      style={
+        {
+          "--emptyTable": usersCount <= 0 ? "none" : "flex",
+        } as React.CSSProperties
+      }
+    >
+      {usersCount > 0 ? (
+        <div>
           <table>
             <thead>
               <tr>
@@ -139,7 +146,7 @@ function SummaryTable({
       ) : (
         <> {usersCount > 0 && <p>{t.spending.nowAddSpending}</p>}</>
       )}
-    </>
+    </div>
   );
 }
 

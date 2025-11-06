@@ -1,5 +1,6 @@
 :root {
   --primary-color: #082032;
+  --primary-dark: #051726;
   --secondary-color: #2c394b;
   --tertiary-color: #334756;
   --accent-color: #ff4c29;
@@ -9,6 +10,12 @@
   --dimmed-text-color: rgba(255, 255, 255, 0.4);
   --positive-color: #4caf50;
   --negative-color: #f44336;
+  --elevation-2dp: 0px 1px 3px rgba(0, 0, 0, 0.12),
+    0px 1px 2px rgba(0, 0, 0, 0.24);
+  --elevation-4dp: 0px 4px 6px rgba(0, 0, 0, 0.2),
+    0px 2px 4px rgba(0, 0, 0, 0.18);
+  --elevation-8dp: 0px 6px 10px rgba(0, 0, 0, 0.25),
+    0px 3px 5px rgba(0, 0, 0, 0.22);
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

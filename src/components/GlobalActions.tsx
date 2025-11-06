@@ -228,26 +228,32 @@ function GlobalActions({
         </button>
       </div>
       <div className="global-actions-contexts">
-        <span className="global-actions-mini-text">{t.app.language}</span>
-        <select
-          name="language"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value as Language)}
-        >
-          <option value="en">English</option>
-          <option value="pl">Polski</option>
-        </select>
-        <span className="global-actions-mini-text">{t.app.targetCurrency}</span>
-        <select
-          name="currency"
-          value={currency}
-          onChange={handleCurrencyChange}
-        >
-          <option value="usd">USD</option>
-          <option value="eur">EUR</option>
-          <option value="gbp">GBP</option>
-          <option value="pln">PLN</option>
-        </select>
+        <div className="global-actions-contexts-language">
+          <label className="global-actions-mini-text">{t.app.language}</label>
+          <select
+            name="language"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as Language)}
+          >
+            <option value="en">English</option>
+            <option value="pl">Polski</option>
+          </select>
+        </div>
+        <div className="global-actions-contexts-currency">
+          <label className="global-actions-mini-text">
+            {t.app.targetCurrency}
+          </label>
+          <select
+            name="currency"
+            value={currency}
+            onChange={handleCurrencyChange}
+          >
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+            <option value="gbp">GBP</option>
+            <option value="pln">PLN</option>
+          </select>
+        </div>
       </div>
     </div>
   );
