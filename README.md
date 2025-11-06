@@ -1,6 +1,6 @@
 # 💰 Spendings App Revamped
 
-A modern, responsive expense tracking application built with React and TypeScript. Track spendings across multiple users with an intuitive interface, multi-language support, multi-currency support, and persistent data storage.
+A modern, responsive expense tracking application built with React and TypeScript. Track spendings across multiple users with an intuitive Material UI-inspired interface, multi-language support, multi-currency support, data export/import capabilities, and persistent storage.
 
 ## ✨ Features
 
@@ -13,6 +13,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Smart Filtering**: Filter spendings by user and currency to see specific expense histories
 - **Summary Dashboard**: View total spendings per user with automatic currency conversions
 - **Data Persistence**: All data automatically saved to browser's localStorage
+- **Export/Import**: Export and import both spendings and users data in JSON format
 
 ### Internationalization & Localization
 
@@ -26,6 +27,12 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Independent Settings**: Language and currency can be changed independently
 - **Seamless Switching**: All preferences persist across sessions
 
+### Design & Styling
+
+- **Material UI-Inspired Design**: Unified, professional design system inspired by Material UI
+- **Custom Color Palette**: Carefully crafted color scheme with primary, secondary, and elevated states
+- **SVG Icon System**: Clean, scalable vector icons loaded as React components via vite-plugin-svgr
+
 ### User Experience
 
 - **Color-Coded Users**: Each user has a unique color for easy identification
@@ -35,15 +42,17 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Currency Filtering**: Filter view by specific currency
 - **Smart Error Handling**: Graceful handling of API failures with user feedback
 - **Responsive Design**: Modern, clean interface that works on all devices
+- **Mobile-Optimized**: Flex-direction adjustments, collapsible spendings list, and optimized layouts for mobile devices
 
 ## 🚀 Tech Stack
 
 - **React 19** - Modern React with hooks
 - **TypeScript** - Type-safe development
 - **Vite** - Lightning-fast build tool
+- **vite-plugin-svgr** - SVG imports as React components
 - **Context API** - State management for language, translations, and currency
 - **LocalStorage** - Client-side data persistence
-- **CSS3** - Custom styling with modern CSS features
+- **CSS3** - Custom styling with modern CSS features (Material UI-inspired design)
 - **Intl API** - Native internationalization and currency formatting
 - **Currency API** - Real-time exchange rates from Vercel-hosted API
 
@@ -65,11 +74,12 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 ### Managing Expenses
 
-- **Edit**: Click the ✏️ button to edit an expense, then 💾 to save (or press Enter)
-- **Delete**: Click the ➖ button to remove an expense
+- **Edit**: Click the edit icon button to edit an expense, then save icon to save (or press Enter)
+- **Delete**: Click the delete icon button to remove an expense
 - **Filter by User**: Check "Filter by user" to see only the selected user's expenses
 - **Filter by Currency**: Check "Filter by currency" to see only expenses in a specific currency
 - **View Conversions**: Hover over any amount to see the converted value in your display currency
+- **Expand/Collapse List**: Use the expand/collapse button to show or hide the spendings list
 
 ### Changing Settings
 
@@ -82,7 +92,11 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 ### Managing Data
 
-- **Clear All Data**: Click the 🚫 button in the top right to clear all local data
+- **Export Data**: Export both spendings and users to a JSON file for backup or transfer
+- **Import Data**: Import previously exported data back into the app
+  - Automatically fetches missing exchange rates upon import
+  - Seamlessly restores all your spendings and users
+- **Clear All Data**: Click the clear icon button in the top right to clear all local data
   - This removes all spendings, users, settings, and cached exchange rates
   - A confirmation dialog will appear before clearing
   - It may come in handy if I mess things up between commits
@@ -94,14 +108,14 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 - [x] **Mixed Currency Support**: Allow each spending entry to have its own currency with automatic conversion rates ✅
 - [x] **Currency Conversion**: Real-time exchange rates and automatic currency conversion in summary view ✅
-- [ ] **Export Functionality**: Export data to CSV/PDF formats
+- [x] **Export/Import Functionality**: Export and import data in JSON format with automatic exchange rate fetching ✅
 
 ### Medium Priority
 
 - [ ] **Charts and Visualizations**: Add pie charts and graphs for spending analysis
 - [ ] **Date Range Filtering**: Filter expenses by date range (week, month, year)
 - [ ] **Search Functionality**: Search expenses by description, amount, or date
-- [ ] **UI Enchancements**: Improve the accessibility of the user interface
+- [x] **UI Enhancements**: Improved accessibility and unified Material UI-inspired design with SVG icons ✅
 
 ### Low Priority
 
