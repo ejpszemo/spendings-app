@@ -153,6 +153,7 @@ function SpendingsInput({
               className="spendings-input-amount"
               placeholder={t.spending.amount}
               min="0"
+              step="0.01"
               disabled={selectedUserId === null}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}

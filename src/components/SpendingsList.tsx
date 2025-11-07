@@ -164,6 +164,7 @@ function SpendingsList({
                                       className="spendings-list-amount-input"
                                       placeholder={t.spending.amount}
                                       min="0"
+                                      step="0.01"
                                       value={editInputValue}
                                       onChange={(e) =>
                                         setEditInputValue(e.target.value)

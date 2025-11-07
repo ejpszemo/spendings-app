@@ -1,9 +1,12 @@
-export const exportToJSON = (data: any[] | Record<string, any[]>, filename: string) => {
+export const exportToJSON = (
+  data: any[] | Record<string, any[]>,
+  filename: string
+) => {
   const jsonString = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonString], { type: 'application/json' });
+  const blob = new Blob([jsonString], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
   link.download = filename;
   link.click();
@@ -18,23 +21,38 @@ export const importFromJSON = async (
   const text = await file.text();
   try {
     const data = JSON.parse(text);
-    if (!data || typeof data !== 'object') {
+    if (!data || typeof data !== "object") {
       alert("Invalid file format! Expected an object.");
       return null;
     }
-    
+
     const hasUsers = data.users && Array.isArray(data.users);
     const hasSpendings = data.spendings && Array.isArray(data.spendings);
-    
+
     if (!hasUsers && !hasSpendings) {
-      alert("Invalid file format! Expected at least 'users' or 'spendings' array.");
+      alert(
+        "Invalid file format! Expected at least 'users' or 'spendings' array."
+      );
       return null;
     }
-    
+
     return data;
   } catch (error) {
     alert("Invalid JSON file!");
     console.error("Invalid JSON file:", error);
     return null;
   }
+};
+
+export const getTimestamp = (): string => {
+  const now = new Date();
+  const pad = (num: number) => String(num).padStart(2, "0");
+  const year = now.getFullYear();
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
+  const hour = pad(now.getHours());
+  const minute = pad(now.getMinutes());
+  const second = pad(now.getSeconds());
+
+  return `${year}${month}${day}_${hour}${minute}${second}`;
 };

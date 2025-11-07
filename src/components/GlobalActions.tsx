@@ -1,6 +1,6 @@
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
-import { exportToJSON, importFromJSON } from "../utils/exporter";
+import { exportToJSON, importFromJSON, getTimestamp } from "../utils/exporter";
 import { fetchCurrencyRates } from "../hooks/useCurrencyApi";
 import type { Language } from "../translations";
 import type { Currency } from "../currencies";
@@ -107,7 +107,7 @@ function GlobalActions({
       users,
       spendings,
     };
-    exportToJSON(dataToExport, "spendings_export.json");
+    exportToJSON(dataToExport, `spendings_export_${getTimestamp()}.json`);
   };
 
   const handleImportData = async (
