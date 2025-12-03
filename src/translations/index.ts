@@ -12,4 +12,3 @@ export const localeMap: Record<Language, string> = {
   en: "en-US",
   pl: "pl-PL",
 };
-

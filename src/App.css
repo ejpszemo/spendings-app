@@ -255,8 +255,7 @@ th {
   gap: 0.5rem;
 }
 
-.global-actions-contexts-language,
-.global-actions-contexts-currency {
+.global-actions-contexts-selector {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -339,7 +338,7 @@ th {
   padding: 0 10px 0 10px;
   border: 2px solid var(--pred-color, gray);
   border-radius: 8px;
-  background-color: var(--text-color);
+  background-color: var(--white-color);
   color: var(--black-color);
   font-weight: bold;
   user-select: none;

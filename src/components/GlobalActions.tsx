@@ -1,7 +1,9 @@
+import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
 import { exportToJSON, importFromJSON, getTimestamp } from "../utils/exporter";
 import { fetchCurrencyRates } from "../hooks/useCurrencyApi";
+import type { Theme } from "../themes";
 import type { Language } from "../translations";
 import type { Currency } from "../currencies";
 import type { Rates, Spending, User } from "../types";
@@ -26,6 +28,7 @@ function GlobalActions({
   setRates: (rates: Rates[]) => void;
   setSelectedUserId: (userId: string | null) => void;
 }) {
+  const { theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
   const { currency, setCurrency } = useCurrency();
 
@@ -228,7 +231,18 @@ function GlobalActions({
         </button>
       </div>
       <div className="global-actions-contexts">
-        <div className="global-actions-contexts-language">
+        <div className="global-actions-contexts-selector">
+          <label className="global-actions-mini-text">{t.app.theme}</label>
+          <select
+            name="theme"
+            value={theme}
+            onChange={(e) => setTheme(e.target.value as Theme)}
+          >
+            <option value="light">{t.app.light}</option>
+            <option value="dark">{t.app.dark}</option>
+          </select>
+        </div>
+        <div className="global-actions-contexts-selector">
           <label className="global-actions-mini-text">{t.app.language}</label>
           <select
             name="language"
@@ -239,7 +253,7 @@ function GlobalActions({
             <option value="pl">Polski</option>
           </select>
         </div>
-        <div className="global-actions-contexts-currency">
+        <div className="global-actions-contexts-selector">
           <label className="global-actions-mini-text">
             {t.app.targetCurrency}
           </label>

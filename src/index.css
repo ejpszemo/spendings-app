@@ -4,6 +4,7 @@
   --secondary-color: #2c394b;
   --tertiary-color: #334756;
   --accent-color: #ff4c29;
+
   --black-color: #000;
   --white-color: #fff;
   --text-color: rgba(255, 255, 255, 0.87);
@@ -28,4 +29,14 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="light"] {
+  --primary-color: #FEFFD2;
+  --primary-dark: #F2E8AF;
+  --secondary-color: #FFEEA9;
+  --tertiary-color: #FFBF78;
+  --accent-color: #FF7D29;
+  --text-color: rgba(0, 0, 0, 0.87);
+  --dimmed-text-color: rgba(0, 0, 0, 0.4);
 }

@@ -3,14 +3,20 @@ import type { Translation } from "./en";
 export const pl: Translation = {
   app: {
     title: "Aplikacja do Wydatków",
-    removeUserConfirmation: "Czy na pewno chcesz usunąć tego użytkownika? \nWszystkie wydatki przypisane do tego użytkownika zostaną z nim usunięte.",
-    clearSpendingsConfirmation: "Czy na pewno chcesz wyczyścić wszystkie dane lokalne? \nTa akcja nie może zostać cofnięta.",
-    importDataConfirmation: "Czy na pewno chcesz zaimportować te dane? \nSpowoduje to nadpisanie wszystkich obecnych danych wydatków.",
+    removeUserConfirmation:
+      "Czy na pewno chcesz usunąć tego użytkownika? \nWszystkie wydatki przypisane do tego użytkownika zostaną z nim usunięte.",
+    clearSpendingsConfirmation:
+      "Czy na pewno chcesz wyczyścić wszystkie dane lokalne? \nTa akcja nie może zostać cofnięta.",
+    importDataConfirmation:
+      "Czy na pewno chcesz zaimportować te dane? \nSpowoduje to nadpisanie wszystkich obecnych danych wydatków.",
     targetCurrency: "Waluta docelowa:",
     language: "Język:",
     clearData: "Wyczyść dane",
     exportData: "Eksportuj dane",
     importData: "Importuj dane",
+    theme: "Motyw",
+    light: "Jasny",
+    dark: "Ciemny",
   },
   user: {
     userName: "imię...",
@@ -22,8 +28,10 @@ export const pl: Translation = {
     filterByCurrency: "Filtruj według waluty",
     firstAddUser: "Najpierw dodaj użytkownika",
     nowAddSpending: "Teraz dodaj jakieś wydatki",
-    validSpendingAmount: "Wprowadź poprawną kwotę i upewnij się, że użytkownik jest wybrany",
-    lastRatesUpdate: (currency: string) => `Ostatnia aktualizacja kursów ${currency}:`,
+    validSpendingAmount:
+      "Wprowadź poprawną kwotę i upewnij się, że użytkownik jest wybrany",
+    lastRatesUpdate: (currency: string) =>
+      `Ostatnia aktualizacja kursów ${currency}:`,
     expand: "Rozwiń",
     collapse: "Zwiń",
   },
@@ -36,4 +44,3 @@ export const pl: Translation = {
     division: "Podział",
   },
 };
-

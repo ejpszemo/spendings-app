@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
 import useCurrencyApi from "./hooks/useCurrencyApi";
 import type { Rates, Spending, User } from "./types";
+import type { Theme } from "./themes";
 import type { Language } from "./translations";
 import type { Currency } from "./currencies";
 import UserSelector from "./components/UserSelector";
@@ -96,6 +98,10 @@ function App() {
   );
   const [selectedSpendingCurrency, setSelectedSpendingCurrency] =
     useLocalStorage<Currency>("spendingsApp_selectedCurrency", "usd");
+  const [theme, setTheme] = useLocalStorage<Theme>(
+    "spendingsApp_theme",
+    "dark"
+  );
   const [language, setLanguage] = useLocalStorage<Language>(
     "spendingsApp_language",
     "en"
@@ -127,22 +133,24 @@ function App() {
   }, []);
 
   return (
-    <LanguageProvider language={language} setLanguage={setLanguage}>
-      <CurrencyProvider currency={currency} setCurrency={setCurrency}>
-        <AppContent
-          spendings={spendings}
-          setSpendings={setSpendings}
-          users={users}
-          setUsers={setUsers}
-          selectedUserId={selectedUserId}
-          setSelectedUserId={setSelectedUserId}
-          selectedSpendingCurrency={selectedSpendingCurrency}
-          setSelectedSpendingCurrency={setSelectedSpendingCurrency}
-          rates={rates}
-          setRates={setRates}
-        />
-      </CurrencyProvider>
-    </LanguageProvider>
+    <ThemeProvider theme={theme} setTheme={setTheme}>
+      <LanguageProvider language={language} setLanguage={setLanguage}>
+        <CurrencyProvider currency={currency} setCurrency={setCurrency}>
+          <AppContent
+            spendings={spendings}
+            setSpendings={setSpendings}
+            users={users}
+            setUsers={setUsers}
+            selectedUserId={selectedUserId}
+            setSelectedUserId={setSelectedUserId}
+            selectedSpendingCurrency={selectedSpendingCurrency}
+            setSelectedSpendingCurrency={setSelectedSpendingCurrency}
+            rates={rates}
+            setRates={setRates}
+          />
+        </CurrencyProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

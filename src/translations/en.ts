@@ -1,14 +1,20 @@
 export const en = {
   app: {
     title: "Spendings App",
-    removeUserConfirmation: "Are you sure you want to remove this user? \nAll spendings assigned to this user will be removed as well.",
-    clearSpendingsConfirmation: "Are you sure you want to clear all local data? \nThis action cannot be undone.",
-    importDataConfirmation: "Are you sure you want to import this data? \nThis will overwrite all current spendings data.",
+    removeUserConfirmation:
+      "Are you sure you want to remove this user? \nAll spendings assigned to this user will be removed as well.",
+    clearSpendingsConfirmation:
+      "Are you sure you want to clear all local data? \nThis action cannot be undone.",
+    importDataConfirmation:
+      "Are you sure you want to import this data? \nThis will overwrite all current spendings data.",
     targetCurrency: "Target currency:",
     language: "Language:",
     clearData: "Clear data",
     exportData: "Export data",
     importData: "Import data",
+    theme: "Theme",
+    light: "Light",
+    dark: "Dark",
   },
   user: {
     userName: "user name...",
@@ -20,7 +26,8 @@ export const en = {
     filterByCurrency: "Filter by currency",
     firstAddUser: "First, add a user",
     nowAddSpending: "Now add some spendings",
-    validSpendingAmount: "Enter a valid spending amount and make sure user is selected",
+    validSpendingAmount:
+      "Enter a valid spending amount and make sure user is selected",
     lastRatesUpdate: (currency: string) => `Last ${currency} rates update:`,
     expand: "Expand",
     collapse: "Collapse",
@@ -36,4 +43,3 @@ export const en = {
 };
 
 export type Translation = typeof en;
-

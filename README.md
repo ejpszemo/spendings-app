@@ -32,6 +32,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Material UI-Inspired Design**: Unified, professional design system inspired by Material UI
 - **Custom Color Palette**: Carefully crafted color scheme with primary, secondary, and elevated states
 - **SVG Icon System**: Clean, scalable vector icons loaded as React components via vite-plugin-svgr
+- **Themes**: Support for switching between light and dark themes
 
 ### User Experience
 
@@ -84,6 +85,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 ### Changing Settings
 
 - **Language**: Use the language selector at the top to switch between English and Polski (Polish)
+- **Theme**: Use the theme selector to switch between light and dark themes
 - **Display Currency**: Use the global currency selector to set your preferred viewing currency
   - All spending totals automatically convert to this currency
   - Individual spending amounts show in their original currency
@@ -119,7 +121,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 ### Low Priority
 
-- [ ] **Dark Mode Theme**: Add dark/light theme toggle
+- [x] **Dark Mode Theme**: Add dark/light theme toggle ✅
 - [ ] **More Languages**: Support for additional languages (Spanish, French, German, etc.)
 - [ ] **More Currencies**: Support for cryptocurrency and additional fiat currencies
 - [ ] **Cloud Sync**: Backend integration for data synchronization across devices
@@ -135,4 +137,4 @@ ejpszemo - [@ejpszemo](https://github.com/ejpszemo)
 
 ---
 
-**Note**: All data is stored locally in your browser using localStorage. Use the 🚫 button to clear app data, or clearing your browser data will also erase all spendings and users.
+**Note**: All data is stored locally in your browser using localStorage. Use the Clear data button to clear app data, or clearing your browser data will also erase all spendings and users.
