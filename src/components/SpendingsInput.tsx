@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
+import { currencies } from "../currencies";
 import { formatDate } from "../utils/formatter";
 import useCurrencyApi from "../hooks/useCurrencyApi";
 import type { Rates, Spending } from "../types";
@@ -143,10 +144,11 @@ function SpendingsInput({
               value={selectedSpendingCurrency}
               onChange={handleSpendingCurrencyChange}
             >
-              <option value="usd">USD</option>
-              <option value="eur">EUR</option>
-              <option value="gbp">GBP</option>
-              <option value="pln">PLN</option>
+              {Object.entries(currencies).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
             </select>
             <input
               type="number"

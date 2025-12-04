@@ -18,7 +18,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 ### Internationalization & Localization
 
 - **Multi-Language Support**: Switch between English and Polish
-- **Multi-Currency Support**: Choose from USD, EUR, GBP, or PLN
+- **Multi-Currency Support**: Choose from USD, EUR, GBP, PLN, CZK, CHF, JPY, CAD, AUD, NZD, SEK, or NOK
 - **Dual Currency System**:
   - Global display currency for viewing totals
   - Individual spending currency for each entry
@@ -123,7 +123,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 - [x] **Dark Mode Theme**: Add dark/light theme toggle ✅
 - [ ] **More Languages**: Support for additional languages (Spanish, French, German, etc.)
-- [ ] **More Currencies**: Support for cryptocurrency and additional fiat currencies
+- [x] **More Currencies**: Support for additional currencies ✅
 - [ ] **Cloud Sync**: Backend integration for data synchronization across devices
 - [ ] **Mobile App**: Native mobile app version (React Native)
 

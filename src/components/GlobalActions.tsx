@@ -1,6 +1,7 @@
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
+import { currencies } from "../currencies";
 import { exportToJSON, importFromJSON, getTimestamp } from "../utils/exporter";
 import { fetchCurrencyRates } from "../hooks/useCurrencyApi";
 import type { Theme } from "../themes";
@@ -262,10 +263,11 @@ function GlobalActions({
             value={currency}
             onChange={handleCurrencyChange}
           >
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="gbp">GBP</option>
-            <option value="pln">PLN</option>
+            {Object.entries(currencies).map(([key, value]) => (
+              <option key={key} value={key}>
+                {value}
+              </option>
+            ))}
           </select>
         </div>
       </div>
