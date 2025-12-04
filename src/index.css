@@ -32,11 +32,11 @@
 }
 
 :root[data-theme="light"] {
-  --primary-color: #FEFFD2;
-  --primary-dark: #F2E8AF;
-  --secondary-color: #FFEEA9;
-  --tertiary-color: #FFBF78;
-  --accent-color: #FF7D29;
+  --primary-color: #f5f7fb;
+  --primary-dark: #e9eef6;
+  --secondary-color: #dbe2f0;
+  --tertiary-color: #ccd6eb;
+  --accent-color: #ff6f3c;
   --text-color: rgba(0, 0, 0, 0.87);
   --dimmed-text-color: rgba(0, 0, 0, 0.4);
 }
