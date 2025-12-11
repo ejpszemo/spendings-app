@@ -31,6 +31,7 @@ export const en = {
     lastRatesUpdate: (currency: string) => `Last ${currency} rates update:`,
     expand: "Expand",
     collapse: "Collapse",
+    search: "search...",
   },
   summary: {
     user: "User",

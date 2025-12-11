@@ -11,6 +11,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Mixed Currency Support**: Each spending entry can have its own currency
 - **Real-Time Currency Conversion**: Automatic exchange rate fetching and conversion via API
 - **Smart Filtering**: Filter spendings by user and currency to see specific expense histories
+- **Search Bar**: Easily search expenses by their descriptions
 - **Summary Dashboard**: View total spendings per user with automatic currency conversions
 - **Data Persistence**: All data automatically saved to browser's localStorage
 - **Export/Import**: Export and import both spendings and users data in JSON format
@@ -41,6 +42,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Date Display**: Human-readable date formats based on language locale
 - **Dual Currency Display**: See both original and converted amounts (hover tooltip)
 - **Currency Filtering**: Filter view by specific currency
+- **Description searching**: Find a specific expense using the search bar
 - **Smart Error Handling**: Graceful handling of API failures with user feedback
 - **Responsive Design**: Modern, clean interface that works on all devices
 - **Mobile-Optimized**: Flex-direction adjustments, collapsible spendings list, and optimized layouts for mobile devices
@@ -79,6 +81,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 - **Delete**: Click the delete icon button to remove an expense
 - **Filter by User**: Check "Filter by user" to see only the selected user's expenses
 - **Filter by Currency**: Check "Filter by currency" to see only expenses in a specific currency
+- **Search**: Start typing to find what you're looking for
 - **View Conversions**: Hover over any amount to see the converted value in your display currency
 - **Expand/Collapse List**: Use the expand/collapse button to show or hide the spendings list
 
@@ -116,7 +119,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 
 - [ ] **Charts and Visualizations**: Add pie charts and graphs for spending analysis
 - [ ] **Date Range Filtering**: Filter expenses by date range (week, month, year)
-- [ ] **Search Functionality**: Search expenses by description, amount, or date
+- [x] **Search Functionality**: Search expenses by description, amount, or date ✅
 - [x] **UI Enhancements**: Improved accessibility and unified Material UI-inspired design with SVG icons ✅
 
 ### Low Priority

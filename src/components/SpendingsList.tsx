@@ -10,6 +10,8 @@ import RemoveIcon from "../assets/icons/remove.svg?react";
 import SaveIcon from "../assets/icons/save.svg?react";
 import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
 import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
+import SearchIcon from "../assets/icons/search.svg?react";
+import ClearInputIcon from "../assets/icons/clear_input.svg?react";
 
 function SpendingsList({
   spendings,
@@ -34,6 +36,7 @@ function SpendingsList({
   const [editInputValue, setEditInputValue] = useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
   const [expanded, setExpanded] = useState<boolean>(true);
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const usersDataMemo = useMemo(() => {
     const userMap = new Map<string, { name: string; color: string }>();
@@ -102,6 +105,13 @@ function SpendingsList({
     return Number(editInputValue) * exchangeRate;
   };
 
+  const searchResults = spendings.filter((spending) => {
+    if (searchValue === "") return spendings;
+    return spending.description
+      .toLowerCase()
+      .includes(searchValue.toLowerCase());
+  });
+
   return (
     <>
       {spendings.length > 0 && (
@@ -134,8 +144,21 @@ function SpendingsList({
                 {t.spending.filterByCurrency}
               </label>
             </div>
+            <div className="spendings-list-search-bar">
+              <SearchIcon className="standard-icon" />
+              <input
+                type="text"
+                className="spendings-list-search-input"
+                placeholder={t.spending.search}
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <button onClick={() => setSearchValue("")}>
+                <ClearInputIcon className="standard-icon" />
+              </button>
+            </div>
             <ol>
-              {spendings
+              {searchResults // replaced plain 'spendings' here for search bar feature
                 .filter((spending) =>
                   filterByUser ? spending.userId === selectedUserId : true
                 )

@@ -215,11 +215,13 @@ th {
   fill: var(--text-color);
   width: 24px;
   height: 24px;
+  transition: fill 0.2s ease, transform 0.2s ease;
 }
 .standard-mini-icon {
   fill: var(--text-color);
   width: 14px;
   height: 14px;
+  transition: fill 0.2s ease, transform 0.2s ease;
 }
 
 /* app container */
@@ -446,6 +448,7 @@ th {
   box-shadow: var(--elevation-2dp);
   width: 100%;
   padding: 1rem 0 1rem 0;
+  gap: 0.5rem;
 }
 
 .spendings-list table {
@@ -522,6 +525,51 @@ th {
 
 .spendings-list-filters {
   user-select: none;
+}
+
+.spendings-list-search-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  .standard-icon {
+    position: absolute;
+    pointer-events: none;
+    padding: 0 2px;
+  }
+
+  .spendings-list-search-input {
+    width: 200px;
+    height: 30px;
+    padding: 0 0 0 30px;
+  }
+
+  button {
+    position: absolute;
+    margin: 0 200px;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: none;
+
+      .standard-icon {
+        fill: var(--accent-color);
+      }
+    }
+
+    &:active {
+      background-color: transparent;
+      box-shadow: none;
+
+      .standard-icon {
+        transform: scale(0.98);
+      }
+    }
+  }
 }
 
 /* summary table */

@@ -34,6 +34,7 @@ export const pl: Translation = {
       `Ostatnia aktualizacja kursów ${currency}:`,
     expand: "Rozwiń",
     collapse: "Zwiń",
+    search: "szukaj...",
   },
   summary: {
     user: "Użytkownik",
