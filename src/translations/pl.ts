@@ -28,13 +28,13 @@ export const pl: Translation = {
     filterByCurrency: "Filtruj według waluty",
     firstAddUser: "Najpierw dodaj użytkownika",
     nowAddSpending: "Teraz dodaj jakieś wydatki",
-    validSpendingAmount:
-      "Wprowadź poprawną kwotę i upewnij się, że użytkownik jest wybrany",
+    validSpendingAmount: "Wprowadź poprawną kwotę",
     lastRatesUpdate: (currency: string) =>
       `Ostatnia aktualizacja kursów ${currency}:`,
     expand: "Rozwiń",
     collapse: "Zwiń",
     search: "szukaj...",
+    remove: "Czy na pewno chcesz usunąć ten wydatek?",
   },
   summary: {
     user: "Użytkownik",

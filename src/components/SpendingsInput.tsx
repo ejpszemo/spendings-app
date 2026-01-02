@@ -26,10 +26,15 @@ function SpendingsInput({
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
 }) {
+  const todayAsInputValue = () => {
+    return new Date().toISOString().slice(0, 10);
+  };
+
   const { t, locale } = useLanguage();
   const { currencyCode } = useCurrency();
   const [inputValue, setInputValue] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [inputDate, setInputDate] = useState<string>(todayAsInputValue());
 
   const handleAddSpending = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,11 +48,13 @@ function SpendingsInput({
     }
 
     try {
+      console.log(new Date().toISOString());
+      console.log(inputDate);
       const newSpending = {
         id: crypto.randomUUID(),
         amount: Number(inputValue),
         description: description,
-        date: new Date().toISOString(),
+        date: inputDate,
         currency: selectedSpendingCurrency,
         exchangedAmount: getExchangedAmount(),
         userId: selectedUserId,
@@ -167,6 +174,14 @@ function SpendingsInput({
               disabled={selectedUserId === null}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+            />
+            <input
+              type="date"
+              className="spendings-input-datepicker"
+              disabled={selectedUserId === null}
+              value={inputDate}
+              onChange={(e) => setInputDate(e.target.value)}
+              required
             />
             <button type="submit">
               <AddIcon className="standard-icon" />

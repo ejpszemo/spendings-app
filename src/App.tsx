@@ -27,6 +27,8 @@ function AppContent({
   setSelectedSpendingCurrency,
   rates,
   setRates,
+  expanded,
+  setExpanded,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -38,8 +40,11 @@ function AppContent({
   setSelectedSpendingCurrency: (currency: Currency) => void;
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
+  expanded: boolean;
+  setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t } = useLanguage();
+  const noData = users.length <= 0;
 
   return (
     <div className="app-container">
@@ -52,9 +57,11 @@ function AppContent({
         setRates={setRates}
         setSelectedUserId={setSelectedUserId}
       />
-      <div className="app-title-container">
-        <h1>{t.app.title}</h1>
-      </div>
+      {noData && (
+        <div className="app-title-container">
+          <h1>{t.app.title}</h1>
+        </div>
+      )}
       <UserSelector
         spendings={spendings}
         setSpendings={setSpendings}
@@ -72,7 +79,6 @@ function AppContent({
         rates={rates}
         setRates={setRates}
       />
-      {/* <SpendingsChart /> */}
       <SpendingsList
         spendings={spendings}
         setSpendings={setSpendings}
@@ -80,6 +86,8 @@ function AppContent({
         selectedUserId={selectedUserId}
         selectedSpendingCurrency={selectedSpendingCurrency}
         rates={rates}
+        expanded={expanded}
+        setExpanded={setExpanded}
       />
       <SummaryTable spendings={spendings} users={users} />
     </div>
@@ -111,6 +119,10 @@ function App() {
     "usd"
   );
   const [rates, setRates] = useLocalStorage<Rates[]>("spendingsApp_rates", []);
+  const [expanded, setExpanded] = useLocalStorage<boolean>(
+    "spendingsApp_listExpanded",
+    true
+  );
 
   // Fetch initial exchange rates on first app load
   useEffect(() => {
@@ -147,6 +159,8 @@ function App() {
             setSelectedSpendingCurrency={setSelectedSpendingCurrency}
             rates={rates}
             setRates={setRates}
+            expanded={expanded}
+            setExpanded={setExpanded}
           />
         </CurrencyProvider>
       </LanguageProvider>

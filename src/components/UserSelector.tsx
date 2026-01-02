@@ -5,6 +5,7 @@ import type { User, Spending } from "../types";
 import AddIcon from "../assets/icons/add.svg?react";
 import RemoveIcon from "../assets/icons/remove.svg?react";
 import SaveIcon from "../assets/icons/save.svg?react";
+import CheckIcon from "../assets/icons/checkmark.svg?react";
 
 function UserSelector({
   spendings,
@@ -53,14 +54,8 @@ function UserSelector({
 
   return (
     <form className="user-selector" onSubmit={handleAddUser}>
-      {users.map((user, index) => (
-        <label
-          key={user.id}
-          className="user-selector-label"
-          style={
-            { "--pred-color": predefinedColors[index] } as React.CSSProperties
-          }
-        >
+      {users.map((user) => (
+        <label key={user.id} className="user-selector-label">
           <input
             type="radio"
             className="user-selector-radio"
@@ -68,6 +63,7 @@ function UserSelector({
             checked={selectedUserId === user.id}
             onChange={(e) => setSelectedUserId(e.target.value)}
           />
+          <CheckIcon className="standard-mini-icon" />
           {user.name}
         </label>
       ))}
