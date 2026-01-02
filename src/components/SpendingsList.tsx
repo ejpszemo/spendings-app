@@ -20,6 +20,8 @@ function SpendingsList({
   selectedUserId,
   selectedSpendingCurrency,
   rates,
+  expanded,
+  setExpanded,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -27,6 +29,8 @@ function SpendingsList({
   selectedUserId: string | null;
   selectedSpendingCurrency: Currency;
   rates: Rates[];
+  expanded: boolean;
+  setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { t, locale } = useLanguage();
   const { currencyCode, currencyLocale } = useCurrency();
@@ -35,7 +39,6 @@ function SpendingsList({
   const [editedSpendingId, setEditedSpendingId] = useState<string | null>(null);
   const [editInputValue, setEditInputValue] = useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
-  const [expanded, setExpanded] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
 
   const usersDataMemo = useMemo(() => {
@@ -77,6 +80,8 @@ function SpendingsList({
     setEditedSpendingId(null);
   };
   const handleDeleteSpending = (id: string) => {
+    if (!confirm(t.spending.remove)) return;
+
     const filteredSpendings = spendings.filter(
       (spending) => spending.id !== id
     );
@@ -105,8 +110,12 @@ function SpendingsList({
     return Number(editInputValue) * exchangeRate;
   };
 
-  const searchResults = spendings.filter((spending) => {
-    if (searchValue === "") return spendings;
+  const spendingsSortedByDate = useMemo(() => {
+    return [...spendings].sort((a, b) => a.date.localeCompare(b.date));
+  }, [spendings]);
+
+  const searchResults = spendingsSortedByDate.filter((spending) => {
+    if (searchValue === "") return spendingsSortedByDate;
     return spending.description
       .toLowerCase()
       .includes(searchValue.toLowerCase());

@@ -24,6 +24,7 @@
 
   color: var(--text-color);
   background-color: var(--primary-color);
+  color-scheme: dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,4 +40,6 @@
   --accent-color: #ff6f3c;
   --text-color: rgba(0, 0, 0, 0.87);
   --dimmed-text-color: rgba(0, 0, 0, 0.4);
+
+  color-scheme: light;
 }

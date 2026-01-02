@@ -26,12 +26,12 @@ export const en = {
     filterByCurrency: "Filter by currency",
     firstAddUser: "First, add a user",
     nowAddSpending: "Now add some spendings",
-    validSpendingAmount:
-      "Enter a valid spending amount and make sure user is selected",
+    validSpendingAmount: "Enter a valid spending amount",
     lastRatesUpdate: (currency: string) => `Last ${currency} rates update:`,
     expand: "Expand",
     collapse: "Collapse",
     search: "search...",
+    remove: "Are you sure you want to remove this spending?",
   },
   summary: {
     user: "User",
