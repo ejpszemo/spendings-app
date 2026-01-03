@@ -8,6 +8,7 @@ import type { Spending, User, Rates } from "../types";
 import EditIcon from "../assets/icons/edit.svg?react";
 import RemoveIcon from "../assets/icons/remove.svg?react";
 import SaveIcon from "../assets/icons/save.svg?react";
+import CancelIcon from "../assets/icons/cancel.svg?react";
 import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
 import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 import SearchIcon from "../assets/icons/search.svg?react";
@@ -37,8 +38,10 @@ function SpendingsList({
   const [filterByUser, setFilterByUser] = useState<boolean>(false);
   const [filterByCurrency, setFilterByCurrency] = useState<boolean>(false);
   const [editedSpendingId, setEditedSpendingId] = useState<string | null>(null);
+  const [editUser, setEditUser] = useState<string>("");
   const [editInputValue, setEditInputValue] = useState<string>("");
   const [editDescription, setEditDescription] = useState<string>("");
+  const [editDate, setEditDate] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
 
   const usersDataMemo = useMemo(() => {
@@ -56,8 +59,10 @@ function SpendingsList({
     const spending = spendings.find((s) => s.id === id);
     if (spending) {
       setEditedSpendingId(id);
+      setEditUser(spending.userId);
       setEditInputValue(spending.amount.toString());
       setEditDescription(spending.description);
+      setEditDate(spending.date);
     }
   };
 
@@ -68,17 +73,31 @@ function SpendingsList({
         spending.id === editedSpendingId
           ? {
               ...spending,
+              userId: editUser,
               amount: Number(editInputValue),
               description: editDescription,
+              date: editDate,
               exchangedAmount: getExchangedAmount(spending.currency),
             }
           : spending
       )
     );
+    setEditUser("");
     setEditInputValue("");
     setEditDescription("");
+    setEditDate("");
     setEditedSpendingId(null);
   };
+
+  const handleCancelEditedSpending = (e: React.FormEvent) => {
+    e.preventDefault();
+    setEditUser("");
+    setEditInputValue("");
+    setEditDescription("");
+    setEditDate("");
+    setEditedSpendingId(null);
+  };
+
   const handleDeleteSpending = (id: string) => {
     if (!confirm(t.spending.remove)) return;
 
@@ -183,14 +202,25 @@ function SpendingsList({
                       <table>
                         <tbody>
                           <tr>
-                            <td className="spendings-list-username">
-                              {userData?.name}
-                            </td>
-                            <td>
-                              {editedSpendingId &&
-                              editedSpendingId === spending.id ? (
-                                <>
+                            {editedSpendingId &&
+                            editedSpendingId === spending.id ? (
+                              <>
+                                <td>
                                   <form onSubmit={handleSaveEditedSpending}>
+                                    <select
+                                      name="users"
+                                      className="spendings-list-user-selector"
+                                      value={editUser}
+                                      onChange={(e) =>
+                                        setEditUser(e.target.value)
+                                      }
+                                    >
+                                      {users.map((user) => (
+                                        <option key={user.id} value={user.id}>
+                                          {user.name}
+                                        </option>
+                                      ))}
+                                    </select>{" "}
                                     <input
                                       type="number"
                                       className="spendings-list-amount-input"
@@ -210,46 +240,72 @@ function SpendingsList({
                                       onChange={(e) =>
                                         setEditDescription(e.target.value)
                                       }
+                                    />{" "}
+                                    <input
+                                      type="date"
+                                      className="spendings-list-datepicker"
+                                      value={editDate}
+                                      onChange={(e) =>
+                                        setEditDate(e.target.value)
+                                      }
                                     />
                                     <button // shenanigans to allow actual button to be in its own td, not inside the form
                                       type="submit"
                                       style={{ display: "none" }}
                                     />
                                   </form>
-                                </>
-                              ) : (
-                                <span
-                                  className="spendings-list-amount"
-                                  title={formatCurrency(
-                                    spending.exchangedAmount,
-                                    currencyCode,
-                                    currencyLocale
-                                  )}
-                                  tabIndex={0}
-                                  style={
-                                    {
-                                      "--pred-color": userData?.color,
-                                    } as React.CSSProperties
-                                  }
-                                >
-                                  {formatCurrency(
-                                    spending.amount,
-                                    spending.currency,
-                                    localeMap[spending.currency]
-                                  )}{" "}
-                                  {spending.description}
-                                </span>
-                              )}
-                            </td>
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td className="spendings-list-username">
+                                  {userData?.name}
+                                </td>
+                                <td>
+                                  <span
+                                    className="spendings-list-amount"
+                                    title={formatCurrency(
+                                      spending.exchangedAmount,
+                                      currencyCode,
+                                      currencyLocale
+                                    )}
+                                    tabIndex={0}
+                                    style={
+                                      {
+                                        "--pred-color": userData?.color,
+                                      } as React.CSSProperties
+                                    }
+                                  >
+                                    {formatCurrency(
+                                      spending.amount,
+                                      spending.currency,
+                                      localeMap[spending.currency]
+                                    )}{" "}
+                                    {spending.description}
+                                  </span>
+                                </td>
+                                <td className="spendings-list-date">
+                                  {formatDate(new Date(spending.date), locale)}
+                                </td>
+                              </>
+                            )}
                             <td className="spendings-list-button-container">
                               {editedSpendingId &&
                               editedSpendingId === spending.id ? (
-                                <button
-                                  onClick={handleSaveEditedSpending}
-                                  className="spendings-list-mini-button"
-                                >
-                                  <SaveIcon className="standard-mini-icon" />
-                                </button>
+                                <>
+                                  <button
+                                    onClick={handleSaveEditedSpending}
+                                    className="spendings-list-mini-button"
+                                  >
+                                    <SaveIcon className="standard-mini-icon" />
+                                  </button>
+                                  <button
+                                    onClick={handleCancelEditedSpending}
+                                    className="spendings-list-mini-button"
+                                  >
+                                    <CancelIcon className="standard-mini-icon" />
+                                  </button>
+                                </>
                               ) : (
                                 <>
                                   <button
@@ -270,9 +326,6 @@ function SpendingsList({
                                   </button>
                                 </>
                               )}
-                            </td>
-                            <td className="spendings-list-date">
-                              {formatDate(new Date(spending.date), locale)}
                             </td>
                           </tr>
                         </tbody>

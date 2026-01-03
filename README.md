@@ -118,7 +118,7 @@ A modern, responsive expense tracking application built with React and TypeScrip
 ### Medium Priority
 
 - [ ] **Charts and Visualizations**: Add pie charts and graphs for spending analysis
-- [x] **Date selector**: Choose a specific date when adding an expense
+- [x] **Date selector**: Choose a specific date when adding an expense ✅
 - [x] **Search Functionality**: Search expenses by description, amount, or date ✅
 - [x] **UI Enhancements**: Improved accessibility and unified Material UI-inspired design with SVG icons ✅
 
