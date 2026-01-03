@@ -17,6 +17,8 @@ function SpendingsInput({
   setSelectedSpendingCurrency,
   rates,
   setRates,
+  dirty,
+  setDirty,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -25,6 +27,8 @@ function SpendingsInput({
   setSelectedSpendingCurrency: (currency: Currency) => void;
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
+  dirty: boolean;
+  setDirty: (dirty: boolean) => void;
 }) {
   const todayAsInputValue = () => {
     return new Date().toISOString().slice(0, 10);
@@ -48,8 +52,6 @@ function SpendingsInput({
     }
 
     try {
-      console.log(new Date().toISOString());
-      console.log(inputDate);
       const newSpending = {
         id: crypto.randomUUID(),
         amount: Number(inputValue),
@@ -62,6 +64,7 @@ function SpendingsInput({
       setInputValue("");
       setDescription("");
       setSpendings([...spendings, newSpending]);
+      setDirty(true);
     } catch (error) {
       console.error("Error adding spending:", error);
       alert(

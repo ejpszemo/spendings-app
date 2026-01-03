@@ -23,6 +23,8 @@ function SpendingsList({
   rates,
   expanded,
   setExpanded,
+  dirty,
+  setDirty,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -32,6 +34,8 @@ function SpendingsList({
   rates: Rates[];
   expanded: boolean;
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  dirty: boolean;
+  setDirty: (dirty: boolean) => void;
 }) {
   const { t, locale } = useLanguage();
   const { currencyCode, currencyLocale } = useCurrency();

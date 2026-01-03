@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { syncData, getData } from "./hooks/useSyncApi";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { CurrencyProvider } from "./contexts/CurrencyContext";
-import useCurrencyApi from "./hooks/useCurrencyApi";
+import useCurrencyApi, { fetchCurrencyRates } from "./hooks/useCurrencyApi";
 import type { Rates, Spending, User } from "./types";
 import type { Theme } from "./themes";
 import type { Language } from "./translations";
@@ -29,6 +30,10 @@ function AppContent({
   setRates,
   expanded,
   setExpanded,
+  dirty,
+  setDirty,
+  userToken,
+  setUserToken,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -42,6 +47,10 @@ function AppContent({
   setRates: (rates: Rates[]) => void;
   expanded: boolean;
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  dirty: boolean;
+  setDirty: (dirty: boolean) => void;
+  userToken: string | null;
+  setUserToken: (token: string | null) => void;
 }) {
   const { t } = useLanguage();
   const noData = users.length <= 0;
@@ -56,6 +65,9 @@ function AppContent({
         rates={rates}
         setRates={setRates}
         setSelectedUserId={setSelectedUserId}
+        userToken={userToken}
+        setUserToken={setUserToken}
+        setDirty={setDirty}
       />
       {noData && (
         <div className="app-title-container">
@@ -78,6 +90,8 @@ function AppContent({
         setSelectedSpendingCurrency={setSelectedSpendingCurrency}
         rates={rates}
         setRates={setRates}
+        dirty={dirty}
+        setDirty={setDirty}
       />
       <SpendingsList
         spendings={spendings}
@@ -88,6 +102,8 @@ function AppContent({
         rates={rates}
         expanded={expanded}
         setExpanded={setExpanded}
+        dirty={dirty}
+        setDirty={setDirty}
       />
       <SummaryTable spendings={spendings} users={users} />
     </div>
@@ -123,6 +139,12 @@ function App() {
     "spendingsApp_listExpanded",
     true
   );
+  const [userToken, setUserToken] = useLocalStorage<string | null>(
+    "spendingsApp_userToken",
+    null
+  );
+
+  const [dirty, setDirty] = useState(false);
 
   // Fetch initial exchange rates on first app load
   useEffect(() => {
@@ -144,6 +166,106 @@ function App() {
     fetchInitialRates();
   }, []);
 
+  // Set user token on first app load
+  useEffect(() => {
+    if (userToken) return;
+    setUserToken(crypto.randomUUID());
+  }, [userToken, setUserToken]);
+
+  // Sync data when dirty
+  useEffect(() => {
+    if (!dirty || !userToken) return;
+    if (users.length <= 0 || spendings.length <= 0) return;
+
+    const timeout = setTimeout(() => {
+      syncData(userToken, users, spendings);
+      setDirty(false);
+    }, 1500);
+
+    return () => clearTimeout(timeout);
+  }, [dirty]);
+
+  // GET data from backend
+  useEffect(() => {
+    if (!userToken) return;
+
+    getData(userToken).then(({ users, spendings }) => {
+      setFetchedData(users, spendings);
+    });
+  }, [userToken]);
+
+  const setFetchedData = async (users: User[], spendings: Spending[]) => {
+    if (users) {
+      setUsers(users);
+      const selectedUserExists = selectedUserId
+        ? users.some((user) => user.id === selectedUserId)
+        : false;
+      if (!selectedUserExists) {
+        setSelectedUserId(users[0]?.id);
+      }
+    }
+
+    // it is copy/paste of GlobalActions/handleImportData, should clean this up later
+    if (spendings) {
+      try {
+        const uniqueCurrencies = Array.from(
+          new Set(spendings.map((s: Spending) => s.currency))
+        ) as Currency[];
+        const missingCurrencies = uniqueCurrencies.filter(
+          (curr) => !rates.find((rate) => rate.base === curr)
+        );
+        const newRates = await Promise.all(
+          missingCurrencies.map((curr) => fetchCurrencyRates(curr))
+        );
+        const allRates = [...rates, ...newRates];
+        const updatedSpendings = spendings.map((spending: Spending) => {
+          try {
+            if (spending.currency === currency) {
+              return { ...spending, exchangedAmount: spending.amount };
+            }
+
+            const spendingRate = allRates.find(
+              (r) => r.base === spending.currency
+            );
+            const exchangeRate = spendingRate?.exchangeRates[currency];
+
+            if (!exchangeRate) {
+              console.warn(
+                `No exchange rate found for ${spending.currency} to ${currency}`
+              );
+              return { ...spending, exchangedAmount: 0 };
+            }
+
+            return {
+              ...spending,
+              exchangedAmount: spending.amount * exchangeRate,
+            };
+          } catch (error) {
+            console.error(
+              `Error calculating exchange for spending ${spending.id}:`,
+              error
+            );
+            return { ...spending, exchangedAmount: 0 };
+          }
+        });
+
+        if (newRates.length > 0) {
+          setRates(allRates);
+        }
+        setSpendings(updatedSpendings);
+      } catch (error) {
+        console.error(
+          "Failed to fetch exchange rates for fetched spendings:",
+          error
+        );
+        setSpendings(spendings);
+        alert(
+          "Fetched data successfully, but some exchange rates may be unavailable. You can update them manually."
+        );
+      }
+    }
+  };
+
   return (
     <ThemeProvider theme={theme} setTheme={setTheme}>
       <LanguageProvider language={language} setLanguage={setLanguage}>
@@ -161,6 +283,10 @@ function App() {
             setRates={setRates}
             expanded={expanded}
             setExpanded={setExpanded}
+            dirty={dirty}
+            setDirty={setDirty}
+            userToken={userToken}
+            setUserToken={setUserToken}
           />
         </CurrencyProvider>
       </LanguageProvider>

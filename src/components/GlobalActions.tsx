@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
@@ -11,6 +12,11 @@ import type { Rates, Spending, User } from "../types";
 import ExportIcon from "../assets/icons/export.svg?react";
 import ImportIcon from "../assets/icons/import.svg?react";
 import ClearIcon from "../assets/icons/clear.svg?react";
+import SaveIcon from "../assets/icons/save.svg?react";
+import CancelIcon from "../assets/icons/cancel.svg?react";
+import CopyIcon from "../assets/icons/copy.svg?react";
+import TokenIcon from "../assets/icons/token.svg?react";
+import CheckIcon from "../assets/icons/checkmark.svg?react";
 
 function GlobalActions({
   spendings,
@@ -20,6 +26,9 @@ function GlobalActions({
   rates,
   setRates,
   setSelectedUserId,
+  userToken,
+  setUserToken,
+  setDirty,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -28,10 +37,39 @@ function GlobalActions({
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
   setSelectedUserId: (userId: string | null) => void;
+  userToken: string | null;
+  setUserToken: (token: string | null) => void;
+  setDirty: (dirty: boolean) => void;
 }) {
   const { theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
   const { currency, setCurrency } = useCurrency();
+  const [addingUserToken, setAddingUserToken] = useState<boolean>(false);
+  const [editUserToken, setEditUserToken] = useState<string>("");
+
+  type TokenActionState = "idle" | "copied" | "saved";
+  const [actionState, setActionState] = useState<TokenActionState>("idle");
+
+  const tokenButtonContent: Record<TokenActionState, React.ReactNode> = {
+    idle: (
+      <>
+        <TokenIcon className="standard-mini-icon" />
+        {t.app.getToken}
+      </>
+    ),
+    copied: (
+      <>
+        <CheckIcon className="standard-mini-icon" />
+        <p>{t.app.tokenCopied}</p>
+      </>
+    ),
+    saved: (
+      <>
+        <CheckIcon className="standard-mini-icon" />
+        <p>{t.app.tokenSaved}</p>
+      </>
+    ),
+  };
 
   const handleCurrencyChange = async (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -204,13 +242,43 @@ function GlobalActions({
 
     // Reset the input value so the same file can be imported again
     event.target.value = "";
+
+    setDirty(true);
   };
+
+  const handleEditUserToken = () => {
+    setEditUserToken(userToken ?? "");
+    setAddingUserToken(true);
+  };
+  const saveUserToken = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editUserToken !== "") {
+      setUserToken(editUserToken);
+    }
+    setActionState("saved");
+    setAddingUserToken(false);
+  };
+  const copyUserToken = () => {
+    navigator.clipboard.writeText(editUserToken);
+    setActionState("copied");
+    setAddingUserToken(false);
+  };
+
+  useEffect(() => {
+    if (actionState === "idle") return;
+
+    const timer = setTimeout(() => {
+      setActionState("idle");
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [actionState]);
 
   return (
     <div className="global-actions-container">
       <div className="global-actions-data-ops">
         <button
-          className="global-actions-mini-button"
+          className="global-actions-mini-long-button"
           onClick={handleExportData}
         >
           <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
@@ -218,14 +286,51 @@ function GlobalActions({
         <label htmlFor="file-upload" className="global-actions-input-label">
           <input
             id="file-upload"
+            className="file-upload-input"
             type="file"
             accept=".json"
             onChange={handleImportData}
           />
           <ImportIcon className="standard-mini-icon" /> {t.app.importData}
         </label>
+        {addingUserToken ? (
+          <form className="global-actions-token-ops" onSubmit={saveUserToken}>
+            <input
+              type="text"
+              value={editUserToken}
+              autoFocus
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => setEditUserToken(e.target.value)}
+            />
+            <button
+              className="global-actions-mini-button"
+              type="button"
+              disabled={!editUserToken}
+              onClick={copyUserToken}
+            >
+              <CopyIcon className="standard-mini-icon" />
+            </button>
+            <button className="global-actions-mini-button" type="submit">
+              <SaveIcon className="standard-mini-icon" />
+            </button>
+            <button
+              className="global-actions-mini-button"
+              type="button"
+              onClick={() => setAddingUserToken(false)}
+            >
+              <CancelIcon className="standard-mini-icon" />
+            </button>
+          </form>
+        ) : (
+          <button
+            className="global-actions-mini-long-button"
+            onClick={handleEditUserToken}
+          >
+            {tokenButtonContent[actionState]}
+          </button>
+        )}
         <button
-          className="global-actions-mini-button"
+          className="global-actions-mini-long-button"
           onClick={handleClearSpendings}
         >
           <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
