@@ -34,6 +34,7 @@ function AppContent({
   setDirty,
   userToken,
   setUserToken,
+  lastSyncAt,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -51,6 +52,7 @@ function AppContent({
   setDirty: (dirty: boolean) => void;
   userToken: string | null;
   setUserToken: (token: string | null) => void;
+  lastSyncAt: Date | null;
 }) {
   const { t } = useLanguage();
   const noData = users.length <= 0;
@@ -104,6 +106,7 @@ function AppContent({
         setExpanded={setExpanded}
         dirty={dirty}
         setDirty={setDirty}
+        lastSyncAt={lastSyncAt}
       />
       <SummaryTable spendings={spendings} users={users} />
     </div>
@@ -143,6 +146,10 @@ function App() {
     "spendingsApp_userToken",
     null
   );
+  const [lastSyncAt, setLastSyncAt] = useLocalStorage<Date | null>(
+    "spendingsApp_lastSyncAt",
+    null
+  );
 
   const [dirty, setDirty] = useState(false);
 
@@ -178,7 +185,9 @@ function App() {
     if (users.length <= 0 || spendings.length <= 0) return;
 
     const timeout = setTimeout(() => {
+      console.log("POST message triggered");
       syncData(userToken, users, spendings);
+      setLastSyncAt(new Date());
       setDirty(false);
     }, 1500);
 
@@ -190,6 +199,7 @@ function App() {
     if (!userToken) return;
 
     getData(userToken).then(({ users, spendings }) => {
+      console.log("GET message triggered");
       setFetchedData(users, spendings);
     });
   }, [userToken]);
@@ -287,6 +297,7 @@ function App() {
             setDirty={setDirty}
             userToken={userToken}
             setUserToken={setUserToken}
+            lastSyncAt={lastSyncAt}
           />
         </CurrencyProvider>
       </LanguageProvider>

@@ -494,6 +494,10 @@ th {
   width: 100%;
   padding: 1rem 0 1rem 0;
   gap: 0.5rem;
+
+  & ol {
+    margin: 0;
+  }
 }
 
 .spendings-list table {
@@ -615,6 +619,11 @@ th {
       }
     }
   }
+}
+
+.spendings-list-sync-timestamp {
+  font-size: 12px;
+  color: var(--dimmed-text-color);
 }
 
 .spendings-list-user-selector {

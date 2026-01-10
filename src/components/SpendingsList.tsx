@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
-import { formatDate, formatCurrency } from "../utils/formatter";
+import { formatDate, formatCurrency, timeAgo } from "../utils/formatter";
 import { predefinedColors } from "../constants/colors";
 import { localeMap, type Currency } from "../currencies";
 import type { Spending, User, Rates } from "../types";
@@ -25,6 +25,7 @@ function SpendingsList({
   setExpanded,
   dirty,
   setDirty,
+  lastSyncAt,
 }: {
   spendings: Spending[];
   setSpendings: (spendings: Spending[]) => void;
@@ -36,6 +37,7 @@ function SpendingsList({
   setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   dirty: boolean;
   setDirty: (dirty: boolean) => void;
+  lastSyncAt: Date | null;
 }) {
   const { t, locale } = useLanguage();
   const { currencyCode, currencyLocale } = useCurrency();
@@ -47,6 +49,9 @@ function SpendingsList({
   const [editDescription, setEditDescription] = useState<string>("");
   const [editDate, setEditDate] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
+  const [timestamp, setTimestamp] = useState<string>(() =>
+    lastSyncAt ? timeAgo(lastSyncAt) : ""
+  );
 
   const usersDataMemo = useMemo(() => {
     const userMap = new Map<string, { name: string; color: string }>();
@@ -144,6 +149,15 @@ function SpendingsList({
       .includes(searchValue.toLowerCase());
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (lastSyncAt) {
+        setTimestamp(timeAgo(lastSyncAt));
+      }
+    }, 60_000);
+    return () => clearInterval(interval);
+  }, [lastSyncAt]);
+
   return (
     <>
       {spendings.length > 0 && (
@@ -188,6 +202,11 @@ function SpendingsList({
               <button onClick={() => setSearchValue("")}>
                 <ClearInputIcon className="standard-icon" />
               </button>
+            </div>
+            <div>
+              <span className="spendings-list-sync-timestamp">
+                last sync: {timestamp}
+              </span>
             </div>
             <ol>
               {searchResults // replaced plain 'spendings' here for search bar feature
