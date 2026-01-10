@@ -150,12 +150,37 @@ function SpendingsList({
   });
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (lastSyncAt) {
-        setTimestamp(timeAgo(lastSyncAt));
-      }
-    }, 60_000);
-    return () => clearInterval(interval);
+    if (!lastSyncAt) return;
+
+    let interval: number;
+
+    const update = () => {
+      setTimestamp(timeAgo(lastSyncAt));
+    };
+
+    const startInterval = () => {
+      console.log("start");
+      update();
+      interval = window.setInterval(update, 60_000);
+    };
+    const stopInterval = () => {
+      console.log("stop");
+      clearInterval(interval);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopInterval();
+      else startInterval();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    if (!document.hidden) startInterval();
+
+    return () => {
+      stopInterval();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [lastSyncAt]);
 
   return (
