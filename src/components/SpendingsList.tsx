@@ -199,137 +199,117 @@ function SpendingsList({
                   const userData = usersDataMemo.get(spending.userId);
                   return (
                     <li key={spending.id}>
-                      <table>
-                        <tbody>
-                          <tr>
-                            {editedSpendingId &&
-                            editedSpendingId === spending.id ? (
-                              <>
-                                <td>
-                                  <form onSubmit={handleSaveEditedSpending}>
-                                    <select
-                                      name="users"
-                                      className="spendings-list-user-selector"
-                                      value={editUser}
-                                      onChange={(e) =>
-                                        setEditUser(e.target.value)
-                                      }
-                                    >
-                                      {users.map((user) => (
-                                        <option key={user.id} value={user.id}>
-                                          {user.name}
-                                        </option>
-                                      ))}
-                                    </select>{" "}
-                                    <input
-                                      type="number"
-                                      className="spendings-list-amount-input"
-                                      placeholder={t.spending.amount}
-                                      min="0"
-                                      step="0.01"
-                                      value={editInputValue}
-                                      onChange={(e) =>
-                                        setEditInputValue(e.target.value)
-                                      }
-                                    />{" "}
-                                    <input
-                                      type="text"
-                                      className="spendings-list-description-input"
-                                      placeholder={t.spending.description}
-                                      value={editDescription}
-                                      onChange={(e) =>
-                                        setEditDescription(e.target.value)
-                                      }
-                                    />{" "}
-                                    <input
-                                      type="date"
-                                      className="spendings-list-datepicker"
-                                      value={editDate}
-                                      onChange={(e) =>
-                                        setEditDate(e.target.value)
-                                      }
-                                    />
-                                    <button // shenanigans to allow actual button to be in its own td, not inside the form
-                                      type="submit"
-                                      style={{ display: "none" }}
-                                    />
-                                  </form>
-                                </td>
-                              </>
-                            ) : (
-                              <>
-                                <td className="spendings-list-username">
-                                  {userData?.name}
-                                </td>
-                                <td>
-                                  <span
-                                    className="spendings-list-amount"
-                                    title={formatCurrency(
-                                      spending.exchangedAmount,
-                                      currencyCode,
-                                      currencyLocale
-                                    )}
-                                    tabIndex={0}
-                                    style={
-                                      {
-                                        "--pred-color": userData?.color,
-                                      } as React.CSSProperties
-                                    }
-                                  >
-                                    {formatCurrency(
-                                      spending.amount,
-                                      spending.currency,
-                                      localeMap[spending.currency]
-                                    )}{" "}
-                                    {spending.description}
-                                  </span>
-                                </td>
-                                <td className="spendings-list-date">
-                                  {formatDate(new Date(spending.date), locale)}
-                                </td>
-                              </>
-                            )}
-                            <td className="spendings-list-button-container">
-                              {editedSpendingId &&
-                              editedSpendingId === spending.id ? (
-                                <>
-                                  <button
-                                    onClick={handleSaveEditedSpending}
-                                    className="spendings-list-mini-button"
-                                  >
-                                    <SaveIcon className="standard-mini-icon" />
-                                  </button>
-                                  <button
-                                    onClick={handleCancelEditedSpending}
-                                    className="spendings-list-mini-button"
-                                  >
-                                    <CancelIcon className="standard-mini-icon" />
-                                  </button>
-                                </>
-                              ) : (
-                                <>
-                                  <button
-                                    onClick={() =>
-                                      handleEditSpending(spending.id)
-                                    }
-                                    className="spendings-list-mini-button"
-                                  >
-                                    <EditIcon className="standard-mini-icon" />
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteSpending(spending.id)
-                                    }
-                                    className="spendings-list-mini-button"
-                                  >
-                                    <RemoveIcon className="standard-mini-icon" />
-                                  </button>
-                                </>
+                      {editedSpendingId && editedSpendingId === spending.id ? (
+                        <form
+                          className="spendings-list-grid-edit-container"
+                          onSubmit={handleSaveEditedSpending}
+                        >
+                          <select
+                            name="users"
+                            className="spendings-list-user-selector"
+                            value={editUser}
+                            onChange={(e) => setEditUser(e.target.value)}
+                          >
+                            {users.map((user) => (
+                              <option key={user.id} value={user.id}>
+                                {user.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="spendings-list-amount-edit-container">
+                            <input
+                              type="number"
+                              className="spendings-list-amount-input"
+                              placeholder={t.spending.amount}
+                              min="0"
+                              step="0.01"
+                              value={editInputValue}
+                              onChange={(e) =>
+                                setEditInputValue(e.target.value)
+                              }
+                            />
+                            <input
+                              type="text"
+                              className="spendings-list-description-input"
+                              placeholder={t.spending.description}
+                              value={editDescription}
+                              onChange={(e) =>
+                                setEditDescription(e.target.value)
+                              }
+                            />
+                          </div>
+                          <input
+                            type="date"
+                            className="spendings-list-datepicker"
+                            value={editDate}
+                            onChange={(e) => setEditDate(e.target.value)}
+                          />
+                          <div className="spendings-list-button-container">
+                            <button
+                              className="spendings-list-mini-button"
+                              type="submit"
+                            >
+                              <SaveIcon className="standard-mini-icon" />
+                            </button>
+                            <button
+                              className="spendings-list-mini-button"
+                              onClick={() => handleCancelEditedSpending}
+                            >
+                              <CancelIcon className="standard-mini-icon" />
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <div className="spendings-list-grid-container">
+                          <span className="spendings-list-username">
+                            {userData?.name}
+                          </span>
+                          <div className="spendings-list-amount-container">
+                            <div
+                              className="spendings-list-amount-container-inner"
+                              title={formatCurrency(
+                                spending.exchangedAmount,
+                                currencyCode,
+                                currencyLocale
                               )}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                              tabIndex={0}
+                              style={
+                                {
+                                  "--pred-color": userData?.color,
+                                } as React.CSSProperties
+                              }
+                            >
+                              <span className="spendings-list-amount">
+                                {formatCurrency(
+                                  spending.amount,
+                                  spending.currency,
+                                  localeMap[spending.currency]
+                                )}
+                              </span>
+                              <span className="spendings-list-amount-description">
+                                {spending.description}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="spendings-list-date">
+                            {formatDate(new Date(spending.date), locale)}
+                          </span>
+                          <div className="spendings-list-button-container">
+                            <button
+                              className="spendings-list-mini-button"
+                              onClick={() => handleEditSpending(spending.id)}
+                            >
+                              <EditIcon className="standard-mini-icon" />
+                            </button>
+                            <button
+                              className="spendings-list-mini-button"
+                              onClick={() => handleDeleteSpending(spending.id)}
+                            >
+                              <RemoveIcon className="standard-mini-icon" />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </li>
                   );
                 })}

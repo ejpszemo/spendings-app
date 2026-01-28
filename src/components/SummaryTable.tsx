@@ -57,95 +57,88 @@ function SummaryTable({
         } as React.CSSProperties
       }
     >
-      {usersCount > 0 ? (
-        <div>
-          <table>
-            <thead>
-              <tr>
-                <th>{t.summary.user}</th>
-                <th>{t.summary.claims}</th>
-                <th className="summary-table-hide-on-mobile">
-                  {t.summary.count}
-                </th>
-                <th>{t.summary.unitSum}</th>
-                <th>{t.summary.sum}</th>
-                <th className="summary-table-hide-on-mobile">
-                  {t.summary.division}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {usersDataMemo.map((userMemo, index) => (
-                <tr key={userMemo.id}>
-                  <th
-                    className="summary-table-username"
-                    style={
-                      {
-                        "--pred-color":
-                          predefinedColors[
-                            users.findIndex((user) => user.id === userMemo.id)
-                          ],
-                      } as React.CSSProperties
-                    }
-                  >
-                    {userMemo.name}
-                  </th>
-                  <td
-                    className="summary-table-claims"
-                    style={
-                      {
-                        "--claim-color":
-                          userMemo.claims > 0
-                            ? "var(--positive-color)"
-                            : "var(--negative-color)",
-                      } as React.CSSProperties
-                    }
-                  >
-                    {formatCurrency(
-                      userMemo.claims,
-                      currencyCode,
-                      currencyLocale
-                    )}
-                  </td>
-                  <td className="summary-table-hide-on-mobile">
-                    {userMemo.count}
-                  </td>
-                  <td>
-                    {formatCurrency(
-                      userMemo.unitSum,
-                      currencyCode,
-                      currencyLocale
-                    )}
-                  </td>
-                  {index === 0 && (
-                    <>
-                      <td rowSpan={usersCount}>
-                        {formatCurrency(
-                          userMemo.sum,
-                          currencyCode,
-                          currencyLocale
-                        )}
-                      </td>
-                      <td
-                        className="summary-table-hide-on-mobile"
-                        rowSpan={usersCount}
-                      >
-                        {formatCurrency(
-                          userMemo.division,
-                          currencyCode,
-                          currencyLocale
-                        )}
-                      </td>
-                    </>
-                  )}
+      <div className="summary-table-scroll">
+        {usersCount > 0 ? (
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>{t.summary.user}</th>
+                  <th>{t.summary.claims}</th>
+                  <th>{t.summary.count}</th>
+                  <th>{t.summary.unitSum}</th>
+                  <th>{t.summary.sum}</th>
+                  <th>{t.summary.division}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <> {usersCount > 0 && <p>{t.spending.nowAddSpending}</p>}</>
-      )}
+              </thead>
+              <tbody>
+                {usersDataMemo.map((userMemo, index) => (
+                  <tr key={userMemo.id}>
+                    <th
+                      className="summary-table-username"
+                      style={
+                        {
+                          "--pred-color":
+                            predefinedColors[
+                              users.findIndex((user) => user.id === userMemo.id)
+                            ],
+                        } as React.CSSProperties
+                      }
+                    >
+                      {userMemo.name}
+                    </th>
+                    <td
+                      className="summary-table-claims"
+                      style={
+                        {
+                          "--claim-color":
+                            userMemo.claims > 0
+                              ? "var(--positive-color)"
+                              : "var(--negative-color)",
+                        } as React.CSSProperties
+                      }
+                    >
+                      {formatCurrency(
+                        userMemo.claims,
+                        currencyCode,
+                        currencyLocale
+                      )}
+                    </td>
+                    <td>{userMemo.count}</td>
+                    <td>
+                      {formatCurrency(
+                        userMemo.unitSum,
+                        currencyCode,
+                        currencyLocale
+                      )}
+                    </td>
+                    {index === 0 && (
+                      <>
+                        <td rowSpan={usersCount}>
+                          {formatCurrency(
+                            userMemo.sum,
+                            currencyCode,
+                            currencyLocale
+                          )}
+                        </td>
+                        <td rowSpan={usersCount}>
+                          {formatCurrency(
+                            userMemo.division,
+                            currencyCode,
+                            currencyLocale
+                          )}
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <> {usersCount > 0 && <p>{t.spending.nowAddSpending}</p>}</>
+        )}
+      </div>
     </div>
   );
 }
