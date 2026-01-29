@@ -32,6 +32,7 @@ function GlobalActions({
   const { theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
   const { currency, setCurrency } = useCurrency();
+  const version = import.meta.env.VITE_APP_VERSION ?? "dev";
 
   const handleCurrencyChange = async (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -208,6 +209,7 @@ function GlobalActions({
 
   return (
     <div className="global-actions-container">
+      <div className="global-actions-tag">{version}</div>
       <div className="global-actions-data-ops">
         <button
           className="global-actions-mini-button"

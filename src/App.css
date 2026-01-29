@@ -260,12 +260,21 @@ th {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  position: relative;
   user-select: none;
   background-color: var(--primary-dark);
   border-radius: 4px;
   box-shadow: var(--elevation-2dp);
   width: 100%;
   padding: 1rem 0 1rem 0;
+}
+
+.global-actions-tag {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  font-size: 12px;
+  color: var(--dimmed-text-color);
 }
 
 .global-actions-contexts,
