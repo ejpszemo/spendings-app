@@ -1,16 +1,23 @@
+import { useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
 import { currencies } from "../currencies";
-import { exportToJSON, importFromJSON, getTimestamp } from "../utils/exporter";
+import {
+  exportToJSON,
+  importFromJSON,
+  importFromJSONViaText,
+  getTimestamp,
+} from "../utils/exporter";
 import { fetchCurrencyRates } from "../hooks/useCurrencyApi";
 import type { Theme } from "../themes";
 import type { Language } from "../translations";
 import type { Currency } from "../currencies";
-import type { Rates, Spending, User } from "../types";
+import type { Rates, Spending, User, Output } from "../types";
 import ExportIcon from "../assets/icons/export.svg?react";
 import ImportIcon from "../assets/icons/import.svg?react";
 import ClearIcon from "../assets/icons/clear.svg?react";
+import RawImport from "./RawImport";
 
 function GlobalActions({
   spendings,
@@ -32,10 +39,11 @@ function GlobalActions({
   const { theme, setTheme } = useTheme();
   const { t, language, setLanguage } = useLanguage();
   const { currency, setCurrency } = useCurrency();
+  const [rawImport, setRawImport] = useState<boolean>(false);
   const version = import.meta.env.VITE_APP_VERSION ?? "dev";
 
   const handleCurrencyChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newCurrency = e.target.value as Currency;
     setCurrency(newCurrency);
@@ -50,7 +58,7 @@ function GlobalActions({
         } catch (error) {
           console.error(
             `Failed to exchange amount for spending ${spending.id}:`,
-            error
+            error,
           );
           // Return spending with 0 as fallback
           return {
@@ -68,7 +76,7 @@ function GlobalActions({
   };
   const getExchangeAmount = (
     spending: Spending,
-    newCurrency: Currency
+    newCurrency: Currency,
   ): number => {
     if (spending.currency === newCurrency) {
       return spending.amount;
@@ -116,7 +124,7 @@ function GlobalActions({
   };
 
   const handleImportData = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const importedData = await importFromJSON(event);
 
@@ -135,17 +143,17 @@ function GlobalActions({
           try {
             // Get all unique currencies from imported spendings
             const uniqueCurrencies = Array.from(
-              new Set(spendings.map((s: Spending) => s.currency))
+              new Set(spendings.map((s: Spending) => s.currency)),
             ) as Currency[];
 
             // Find currencies we don't have rates for yet
             const missingCurrencies = uniqueCurrencies.filter(
-              (curr) => !rates.find((rate) => rate.base === curr)
+              (curr) => !rates.find((rate) => rate.base === curr),
             );
 
             // Fetch all missing rates in parallel
             const newRates = await Promise.all(
-              missingCurrencies.map((curr) => fetchCurrencyRates(curr))
+              missingCurrencies.map((curr) => fetchCurrencyRates(curr)),
             );
 
             // Merge with existing rates
@@ -159,13 +167,13 @@ function GlobalActions({
                 }
 
                 const spendingRate = allRates.find(
-                  (r) => r.base === spending.currency
+                  (r) => r.base === spending.currency,
                 );
                 const exchangeRate = spendingRate?.exchangeRates[currency];
 
                 if (!exchangeRate) {
                   console.warn(
-                    `No exchange rate found for ${spending.currency} to ${currency}`
+                    `No exchange rate found for ${spending.currency} to ${currency}`,
                   );
                   return { ...spending, exchangedAmount: 0 };
                 }
@@ -177,7 +185,7 @@ function GlobalActions({
               } catch (error) {
                 console.error(
                   `Error calculating exchange for spending ${spending.id}:`,
-                  error
+                  error,
                 );
                 return { ...spending, exchangedAmount: 0 };
               }
@@ -191,12 +199,12 @@ function GlobalActions({
           } catch (error) {
             console.error(
               "Failed to fetch exchange rates for imported spendings:",
-              error
+              error,
             );
             // Still import the spendings, even if some exchange rates fail
             setSpendings(spendings);
             alert(
-              "Imported data successfully, but some exchange rates may be unavailable. You can update them manually."
+              "Imported data successfully, but some exchange rates may be unavailable. You can update them manually.",
             );
           }
         }
@@ -207,73 +215,179 @@ function GlobalActions({
     event.target.value = "";
   };
 
+  // This is an exact copy of the function above for raw data
+  const handleImportDataViaText = async (data: Output) => {
+    const importedData = await importFromJSONViaText(data);
+
+    if (importedData) {
+      if (confirm(t.app.importDataConfirmation)) {
+        const { users, spendings } = importedData;
+
+        // Update users first
+        if (users) {
+          setUsers(users);
+          setSelectedUserId(users[0]?.id);
+        }
+
+        // Handle spendings with exchange rate recalculation
+        if (spendings) {
+          try {
+            // Get all unique currencies from imported spendings
+            const uniqueCurrencies = Array.from(
+              new Set(spendings.map((s: Spending) => s.currency)),
+            ) as Currency[];
+
+            // Find currencies we don't have rates for yet
+            const missingCurrencies = uniqueCurrencies.filter(
+              (curr) => !rates.find((rate) => rate.base === curr),
+            );
+
+            // Fetch all missing rates in parallel
+            const newRates = await Promise.all(
+              missingCurrencies.map((curr) => fetchCurrencyRates(curr)),
+            );
+
+            // Merge with existing rates
+            const allRates = [...rates, ...newRates];
+
+            // Recalculate exchangedAmounts using the complete rate set
+            const updatedSpendings = spendings.map((spending: Spending) => {
+              try {
+                if (spending.currency === currency) {
+                  return { ...spending, exchangedAmount: spending.amount };
+                }
+
+                const spendingRate = allRates.find(
+                  (r) => r.base === spending.currency,
+                );
+                const exchangeRate = spendingRate?.exchangeRates[currency];
+
+                if (!exchangeRate) {
+                  console.warn(
+                    `No exchange rate found for ${spending.currency} to ${currency}`,
+                  );
+                  return { ...spending, exchangedAmount: 0 };
+                }
+
+                return {
+                  ...spending,
+                  exchangedAmount: spending.amount * exchangeRate,
+                };
+              } catch (error) {
+                console.error(
+                  `Error calculating exchange for spending ${spending.id}:`,
+                  error,
+                );
+                return { ...spending, exchangedAmount: 0 };
+              }
+            });
+
+            // Update state with new rates and corrected spendings
+            if (newRates.length > 0) {
+              setRates(allRates);
+            }
+            setSpendings(updatedSpendings);
+          } catch (error) {
+            console.error(
+              "Failed to fetch exchange rates for imported spendings:",
+              error,
+            );
+            // Still import the spendings, even if some exchange rates fail
+            setSpendings(spendings);
+            alert(
+              "Imported data successfully, but some exchange rates may be unavailable. You can update them manually.",
+            );
+          }
+        }
+      }
+    }
+  };
+
+  const onImport = (data: Output) => {
+    console.log(data);
+    handleImportDataViaText(data);
+    setRawImport((prev: boolean) => !prev);
+  };
+
   return (
-    <div className="global-actions-container">
-      <div className="global-actions-tag">{version}</div>
-      <div className="global-actions-data-ops">
-        <button
-          className="global-actions-mini-button"
-          onClick={handleExportData}
-        >
-          <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
-        </button>
-        <label htmlFor="file-upload" className="global-actions-input-label">
-          <input
-            id="file-upload"
-            type="file"
-            accept=".json"
-            onChange={handleImportData}
-          />
-          <ImportIcon className="standard-mini-icon" /> {t.app.importData}
-        </label>
-        <button
-          className="global-actions-mini-button"
-          onClick={handleClearSpendings}
-        >
-          <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
-        </button>
-      </div>
-      <div className="global-actions-contexts">
-        <div className="global-actions-contexts-selector">
-          <label className="global-actions-mini-text">{t.app.theme}</label>
-          <select
-            name="theme"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value as Theme)}
+    <>
+      {rawImport && (
+        <RawImport
+          onImport={onImport}
+          onClose={() => setRawImport((prev: boolean) => !prev)}
+        />
+      )}
+      <div className="global-actions-container">
+        <div className="global-actions-tag">{version}</div>
+        <div className="global-actions-data-ops">
+          <button
+            className="global-actions-mini-button"
+            onClick={handleExportData}
           >
-            <option value="light">{t.app.light}</option>
-            <option value="dark">{t.app.dark}</option>
-          </select>
-        </div>
-        <div className="global-actions-contexts-selector">
-          <label className="global-actions-mini-text">{t.app.language}</label>
-          <select
-            name="language"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value as Language)}
-          >
-            <option value="en">English</option>
-            <option value="pl">Polski</option>
-          </select>
-        </div>
-        <div className="global-actions-contexts-selector">
-          <label className="global-actions-mini-text">
-            {t.app.targetCurrency}
+            <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
+          </button>
+          <label htmlFor="file-upload" className="global-actions-input-label">
+            <input
+              id="file-upload"
+              type="file"
+              accept=".json"
+              onChange={handleImportData}
+            />
+            <ImportIcon className="standard-mini-icon" /> {t.app.importData}
           </label>
-          <select
-            name="currency"
-            value={currency}
-            onChange={handleCurrencyChange}
+          <button
+            className="global-actions-mini-button"
+            onClick={() => setRawImport((prev: boolean) => !prev)}
           >
-            {Object.entries(currencies).map(([key, value]) => (
-              <option key={key} value={key}>
-                {value}
-              </option>
-            ))}
-          </select>
+            Raw Import
+          </button>
+          <button
+            className="global-actions-mini-button"
+            onClick={handleClearSpendings}
+          >
+            <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
+          </button>
+        </div>
+        <div className="global-actions-contexts">
+          <div className="selector-with-label">
+            <label>{t.app.theme}</label>
+            <select
+              name="theme"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value as Theme)}
+            >
+              <option value="light">{t.app.light}</option>
+              <option value="dark">{t.app.dark}</option>
+            </select>
+          </div>
+          <div className="selector-with-label">
+            <label>{t.app.language}</label>
+            <select
+              name="language"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
+            >
+              <option value="en">English</option>
+              <option value="pl">Polski</option>
+            </select>
+          </div>
+          <div className="selector-with-label">
+            <label>{t.app.targetCurrency}</label>
+            <select
+              name="currency"
+              value={currency}
+              onChange={handleCurrencyChange}
+            >
+              {Object.entries(currencies).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

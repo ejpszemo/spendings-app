@@ -20,3 +20,8 @@ export interface Rates {
   exchangeRates: Record<Currency, number>;
   fetchedAt: Date;
 }
+
+export interface Output {
+  users: User[];
+  spendings: Spending[];
+}

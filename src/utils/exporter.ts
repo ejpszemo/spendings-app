@@ -1,6 +1,8 @@
+import type { Output } from "../types";
+
 export const exportToJSON = (
   data: any[] | Record<string, any[]>,
-  filename: string
+  filename: string,
 ) => {
   const jsonString = JSON.stringify(data, null, 2);
   const blob = new Blob([jsonString], { type: "application/json" });
@@ -13,7 +15,7 @@ export const exportToJSON = (
 };
 
 export const importFromJSON = async (
-  event: React.ChangeEvent<HTMLInputElement>
+  event: React.ChangeEvent<HTMLInputElement>,
 ): Promise<{ users?: any[]; spendings?: any[] } | null> => {
   const file = event.target.files?.[0];
   if (!file) return null;
@@ -31,7 +33,35 @@ export const importFromJSON = async (
 
     if (!hasUsers && !hasSpendings) {
       alert(
-        "Invalid file format! Expected at least 'users' or 'spendings' array."
+        "Invalid file format! Expected at least 'users' or 'spendings' array.",
+      );
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    alert("Invalid JSON file!");
+    console.error("Invalid JSON file:", error);
+    return null;
+  }
+};
+
+// This is an exact copy of the function above for raw data
+export const importFromJSONViaText = async (
+  data: Output,
+): Promise<{ users?: any[]; spendings?: any[] } | null> => {
+  try {
+    if (!data || typeof data !== "object") {
+      alert("Invalid file format! Expected an object.");
+      return null;
+    }
+
+    const hasUsers = data.users && Array.isArray(data.users);
+    const hasSpendings = data.spendings && Array.isArray(data.spendings);
+
+    if (!hasUsers && !hasSpendings) {
+      alert(
+        "Invalid file format! Expected at least 'users' or 'spendings' array.",
       );
       return null;
     }

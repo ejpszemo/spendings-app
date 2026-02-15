@@ -3,6 +3,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useCurrency } from "../contexts/CurrencyContext";
 import { currencies } from "../currencies";
 import { formatDate } from "../utils/formatter";
+import { todayAsInputValue } from "../utils/helper";
 import useCurrencyApi from "../hooks/useCurrencyApi";
 import type { Rates, Spending } from "../types";
 import type { Currency } from "../currencies";
@@ -26,10 +27,6 @@ function SpendingsInput({
   rates: Rates[];
   setRates: (rates: Rates[]) => void;
 }) {
-  const todayAsInputValue = () => {
-    return new Date().toISOString().slice(0, 10);
-  };
-
   const { t, locale } = useLanguage();
   const { currencyCode } = useCurrency();
   const [inputValue, setInputValue] = useState<string>("");
@@ -65,12 +62,12 @@ function SpendingsInput({
     } catch (error) {
       console.error("Error adding spending:", error);
       alert(
-        "Exchange rate not available. Please change currency and try again."
+        "Exchange rate not available. Please change currency and try again.",
       );
     }
   };
   const handleSpendingCurrencyChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newCurrency = e.target.value as Currency;
     setSelectedSpendingCurrency(newCurrency);
@@ -94,7 +91,7 @@ function SpendingsInput({
     }
 
     const exchangeRate = rates.find(
-      (rate) => rate.base === selectedSpendingCurrency
+      (rate) => rate.base === selectedSpendingCurrency,
     )?.exchangeRates[targetCurrency];
 
     if (!exchangeRate) {
@@ -120,7 +117,7 @@ function SpendingsInput({
 
   const getLastRatesUpdate = (): string => {
     const lastUpdate = rates.find(
-      (rate) => rate.base === selectedSpendingCurrency
+      (rate) => rate.base === selectedSpendingCurrency,
     )?.fetchedAt;
     return lastUpdate
       ? formatDate(new Date(lastUpdate), locale, "short", true, "medium")
@@ -140,7 +137,7 @@ function SpendingsInput({
             </button>
             <span className="spendings-input-last-updated-text">
               {t.spending.lastRatesUpdate(
-                selectedSpendingCurrency.toUpperCase()
+                selectedSpendingCurrency.toUpperCase(),
               )}{" "}
               {getLastRatesUpdate()}
             </span>
