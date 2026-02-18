@@ -14,8 +14,8 @@ export function convertToJSON(
   rawText: string,
   currency: Currency,
   headers: HeaderType[],
+  delimiter: string,
 ) {
-  const delimiter = " ";
   const lines = rawText.trim().split("\n");
 
   const entries: Entries[] = lines.slice().map((line) => {

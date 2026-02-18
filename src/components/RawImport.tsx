@@ -5,6 +5,13 @@ import type { Output, HeaderType } from "../types";
 import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
 import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 
+const DELIMITERS = [
+  { value: " ", label: "Space" },
+  { value: ",", label: "," },
+  { value: ";", label: ";" },
+] as const;
+type Delimiter = (typeof DELIMITERS)[number]["value"];
+
 type RawImportProps = {
   onImport: (data: Output) => void;
   onClose: () => void;
@@ -18,11 +25,12 @@ export function RawImport({ onImport, onClose }: RawImportProps) {
     "spending",
     "user",
   ]);
+  const [delimiter, setDelimiter] = useState<Delimiter>(" ");
 
   const handleRawImport = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(headers, currency);
-    const result = convertToJSON(rawData, currency, headers);
+    const result = convertToJSON(rawData, currency, headers, delimiter);
     onImport(result);
   };
 
@@ -50,6 +58,20 @@ export function RawImport({ onImport, onClose }: RawImportProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <h3>Import raw data (beta)</h3>
+        <div className="selector-with-label">
+          <label>Delimiter:</label>
+          <select
+            name="delimiter"
+            value={delimiter}
+            onChange={(e) => setDelimiter(e.target.value as Delimiter)}
+          >
+            {DELIMITERS.map((d) => (
+              <option key={d.value} value={d.value}>
+                {d.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="selector-with-label">
           <label>Currency:</label>
           <select
