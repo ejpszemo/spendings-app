@@ -320,10 +320,7 @@ function GlobalActions({
       <div className="global-actions-container">
         <div className="global-actions-tag">{version}</div>
         <div className="global-actions-data-ops">
-          <button
-            className="global-actions-mini-button"
-            onClick={handleExportData}
-          >
+          <button className="mini-button" onClick={handleExportData}>
             <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
           </button>
           <label htmlFor="file-upload" className="global-actions-input-label">
@@ -336,15 +333,12 @@ function GlobalActions({
             <ImportIcon className="standard-mini-icon" /> {t.app.importData}
           </label>
           <button
-            className="global-actions-mini-button"
+            className="mini-button"
             onClick={() => setRawImport((prev: boolean) => !prev)}
           >
             Raw Import
           </button>
-          <button
-            className="global-actions-mini-button"
-            onClick={handleClearSpendings}
-          >
+          <button className="mini-button" onClick={handleClearSpendings}>
             <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
           </button>
         </div>

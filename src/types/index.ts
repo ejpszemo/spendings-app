@@ -25,3 +25,5 @@ export interface Output {
   users: User[];
   spendings: Spending[];
 }
+
+export type HeaderType = "description" | "spending" | "user" | "empty";

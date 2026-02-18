@@ -53,15 +53,31 @@ button,
     transform 0.1s ease,
     background-color 0.2s ease;
 
-  &:hover {
+  &:hover:enabled {
     background-color: var(--tertiary-color);
     box-shadow: var(--elevation-4dp);
   }
-  &:active {
+  &:active:enabled {
     background-color: var(--accent-color);
     transform: scale(0.98);
     box-shadow: var(--elevation-8dp);
   }
+  &:disabled {
+    background-color: (--secondary-color);
+    color: var(--dimmed-text-color);
+    box-shadow: none;
+    cursor: default;
+
+    & .standard-mini-icon {
+      fill: var(--dimmed-text-color);
+    }
+  }
+}
+.mini-button {
+  font-size: 12px;
+  width: fit-content;
+  height: fit-content;
+  padding: 3px 6px;
 }
 input[type="text"],
 input[type="number"],
@@ -309,13 +325,6 @@ th {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-}
-
-.global-actions-mini-button {
-  font-size: 12px;
-  width: fit-content;
-  height: fit-content;
-  padding: 3px 6px;
 }
 
 .global-actions-container input {
@@ -747,7 +756,7 @@ th {
   color: var(--claim-color, var(--text-color));
 }
 
-/* raw improt */
+/* raw import */
 .raw-import-container {
   position: fixed;
   z-index: 1;
@@ -780,5 +789,29 @@ th {
     box-sizing: border-box;
     min-width: 250px;
     min-height: 250px;
+  }
+}
+
+.raw-import-headers-swap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  & .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+  }
+
+  & label {
+    background-color: var(--secondary-color);
+    padding: 0 5px 0 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    user-select: none;
   }
 }

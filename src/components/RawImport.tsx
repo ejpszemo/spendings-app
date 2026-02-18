@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { convertToJSON } from "../utils/textImporter";
 import { currencies, type Currency } from "../currencies";
-import type { Output } from "../types";
+import type { Output, HeaderType } from "../types";
+import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
+import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 
 type RawImportProps = {
   onImport: (data: Output) => void;
@@ -11,7 +13,11 @@ type RawImportProps = {
 export function RawImport({ onImport, onClose }: RawImportProps) {
   const [rawData, setRawData] = useState<string>("");
   const [currency, setCurrency] = useState<Currency>("usd");
-  const [headers, setHeaders] = useState<string>("description spending user");
+  const [headers, setHeaders] = useState<HeaderType[]>([
+    "description",
+    "spending",
+    "user",
+  ]);
 
   const handleRawImport = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +25,14 @@ export function RawImport({ onImport, onClose }: RawImportProps) {
     const result = convertToJSON(rawData, currency, headers);
     onImport(result);
   };
+
+  function swap(i: number, j: number) {
+    setHeaders((prev) => {
+      const copy = [...prev];
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+      return copy;
+    });
+  }
 
   return (
     <div
@@ -50,32 +64,28 @@ export function RawImport({ onImport, onClose }: RawImportProps) {
             ))}
           </select>
         </div>
-        <div className="selector-with-label">
-          <label>Headers order:</label>
-          <select
-            name="headers"
-            value={headers}
-            onChange={(e) => setHeaders(e.target.value)}
-          >
-            <option value="description spending user">
-              Description Amount User
-            </option>
-            <option value="description user spending">
-              Description User Amount
-            </option>
-            <option value="user spending description">
-              User Amount Description
-            </option>
-            <option value="user description spending">
-              User Description Amount
-            </option>
-            <option value="spending user description">
-              Amount User Description
-            </option>
-            <option value="spending description user">
-              Amount Description User
-            </option>
-          </select>
+        <div className="raw-import-headers-swap">
+          {headers.map((header, index) => (
+            <div key={header} className="item">
+              <button
+                className="mini-button"
+                type="button"
+                disabled={index === 0}
+                onClick={() => swap(index, index - 1)}
+              >
+                <ArrowUpIcon className="standard-mini-icon" />
+              </button>
+              <label>{header}</label>
+              <button
+                className="mini-button"
+                type="button"
+                disabled={index === headers.length - 1}
+                onClick={() => swap(index, index + 1)}
+              >
+                <ArrowDownIcon className="standard-mini-icon" />
+              </button>
+            </div>
+          ))}
         </div>
         <label>
           Paste raw text here:

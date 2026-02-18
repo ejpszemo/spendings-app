@@ -1,5 +1,5 @@
 import { todayAsInputValue } from "./helper";
-import type { User, Spending, Output } from "../types";
+import type { User, Spending, Output, HeaderType } from "../types";
 import type { Currency } from "../currencies";
 
 type Entries = {
@@ -13,14 +13,13 @@ type Entries = {
 export function convertToJSON(
   rawText: string,
   currency: Currency,
-  headersOrder: string,
+  headers: HeaderType[],
 ) {
   const delimiter = " ";
   const lines = rawText.trim().split("\n");
-  const headers = headersOrder.split(delimiter);
 
-  const entries: Entries[] = lines.slice(0).map((line) => {
-    const parts = line.split(" ");
+  const entries: Entries[] = lines.slice().map((line) => {
+    const parts = line.split(delimiter);
 
     const obj: Partial<Entries> = {};
 
