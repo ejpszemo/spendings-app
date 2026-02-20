@@ -62,44 +62,6 @@
     box-shadow: var(--elevation-8dp);
   }
 }
-input[type="text"],
-input[type="number"],
-input[type="date"] {
-  color: var(--text-color);
-  background-color: var(--secondary-color);
-  border: none;
-  border-radius: 4px 4px 0 0;
-  box-shadow: inset 0 -1px 0 0 var(--text-color);
-  box-sizing: border-box;
-  transition:
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
-
-  &::placeholder {
-    color: var(--dimmed-text-color);
-    user-select: none;
-  }
-
-  &:hover {
-    background-color: var(--tertiary-color);
-  }
-
-  &:focus {
-    outline: none;
-    background-color: var(--secondary-color);
-    box-shadow: inset 0 -2px 0 0 var(--accent-color);
-  }
-
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-}
 /* checkboxes */
 input[type="checkbox"] {
   display: none;
@@ -143,6 +105,7 @@ input[type="checkbox"] {
   }
 }
 /* --- */
+
 select,
 ::picker(select) {
   appearance: base-select;
@@ -402,12 +365,6 @@ th {
   position: absolute;
 }
 
-.user-selector-input {
-  width: 100px;
-  height: 30px;
-  padding: 0 0 0 5px;
-}
-
 /* spendings input */
 .spendings-input-container {
   display: flex;
@@ -435,18 +392,6 @@ th {
   }
 }
 
-.spendings-input-amount {
-  width: 100px;
-  height: 30px;
-  padding: 0 0 0 5px;
-}
-
-.spendings-input-description {
-  width: 200px;
-  height: 30px;
-  padding: 0 0 0 5px;
-}
-
 .spendings-input-last-updated {
   display: flex;
   flex-direction: row;
@@ -457,12 +402,6 @@ th {
 
 .spendings-input-last-updated-text {
   font-size: 12px;
-}
-
-.spendings-input-datepicker {
-  width: 110px;
-  height: 30px;
-  padding: 0 5px 0 5px;
 }
 
 /* spendings list */
@@ -576,19 +515,6 @@ th {
   min-block-size: 20px;
   line-height: 18px;
 }
-.spendings-list-amount-input {
-  width: 100%;
-  height: 20px;
-  padding: 0 0 0 5px;
-}
-.spendings-list-description-input {
-  height: 20px;
-  padding: 0 0 0 5px;
-}
-.spendings-list-datepicker {
-  height: 20px;
-  padding: 0 5px 0 5px;
-}
 
 .spendings-list-filters {
   user-select: none;
@@ -618,8 +544,6 @@ th {
   }
 
   .spendings-list-search-input {
-    width: 200px;
-    height: 30px;
     padding: 0 0 0 30px;
   }
 

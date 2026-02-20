@@ -9,6 +9,7 @@ import type { Currency } from "../currencies";
 import AddIcon from "../assets/icons/add.svg?react";
 import RefreshIcon from "../assets/icons/refresh.svg?react";
 import Button from "./ui/Button";
+import Input from "./ui/Input";
 
 function SpendingsInput({
   spendings,
@@ -155,9 +156,9 @@ function SpendingsInput({
                 </option>
               ))}
             </select>
-            <input
+            <Input
+              variant="short-default"
               type="number"
-              className="spendings-input-amount"
               placeholder={t.spending.amount}
               min="0"
               step="0.01"
@@ -165,17 +166,17 @@ function SpendingsInput({
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <input
+            <Input
+              variant="long-default"
               type="text"
-              className="spendings-input-description"
               placeholder={t.spending.description}
               disabled={selectedUserId === null}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <input
+            <Input
+              variant="short-default"
               type="date"
-              className="spendings-input-datepicker"
               disabled={selectedUserId === null}
               value={inputDate}
               onChange={(e) => setInputDate(e.target.value)}

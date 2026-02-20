@@ -14,6 +14,7 @@ import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 import SearchIcon from "../assets/icons/search.svg?react";
 import ClearInputIcon from "../assets/icons/clear_input.svg?react";
 import Button from "./ui/Button";
+import Input from "./ui/Input";
 
 function SpendingsList({
   spendings,
@@ -155,7 +156,8 @@ function SpendingsList({
           >
             <div className="spendings-list-filters">
               <label className="spendings-list-filter-label">
-                <input
+                <Input
+                  variant="none"
                   type="checkbox"
                   checked={filterByUser}
                   onChange={(e) => setFilterByUser(e.target.checked)}
@@ -175,7 +177,8 @@ function SpendingsList({
             </div>
             <div className="spendings-list-search-bar">
               <SearchIcon className="standard-icon" />
-              <input
+              <Input
+                variant="long-default"
                 type="text"
                 className="spendings-list-search-input"
                 placeholder={t.spending.search}
@@ -218,9 +221,9 @@ function SpendingsList({
                             ))}
                           </select>
                           <div className="spendings-list-amount-edit-container">
-                            <input
+                            <Input
+                              variant="short-mini"
                               type="number"
-                              className="spendings-list-amount-input"
                               placeholder={t.spending.amount}
                               min="0"
                               step="0.01"
@@ -229,9 +232,9 @@ function SpendingsList({
                                 setEditInputValue(e.target.value)
                               }
                             />
-                            <input
+                            <Input
+                              variant="long-mini"
                               type="text"
-                              className="spendings-list-description-input"
                               placeholder={t.spending.description}
                               value={editDescription}
                               onChange={(e) =>
@@ -239,9 +242,9 @@ function SpendingsList({
                               }
                             />
                           </div>
-                          <input
+                          <Input
+                            variant="short-mini"
                             type="date"
-                            className="spendings-list-datepicker"
                             value={editDate}
                             onChange={(e) => setEditDate(e.target.value)}
                           />
