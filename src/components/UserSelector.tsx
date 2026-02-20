@@ -6,6 +6,7 @@ import AddIcon from "../assets/icons/add.svg?react";
 import RemoveIcon from "../assets/icons/remove.svg?react";
 import SaveIcon from "../assets/icons/save.svg?react";
 import CheckIcon from "../assets/icons/checkmark.svg?react";
+import Button from "./ui/Button";
 
 function UserSelector({
   spendings,
@@ -47,7 +48,7 @@ function UserSelector({
       setUsers(filteredUsers);
       setSelectedUserId(filteredUsers[0]?.id || null);
       setSpendings(
-        spendings.filter((spending) => spending.userId !== selectedUserId)
+        spendings.filter((spending) => spending.userId !== selectedUserId),
       );
     }
   };
@@ -79,24 +80,26 @@ function UserSelector({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <button type="submit">
+          <Button variant="square-default" type="submit">
             <SaveIcon className="standard-icon" />
-          </button>
+          </Button>
         </>
       ) : (
         <>
-          <button
+          <Button
+            variant="square-default"
             disabled={users.length >= predefinedColors.length}
             onClick={() => setAddingUser(true)}
           >
             <AddIcon className="standard-icon" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="square-default"
             onClick={() => handleRemoveUser()}
             disabled={users.length <= 0}
           >
             <RemoveIcon className="standard-icon" />
-          </button>
+          </Button>
         </>
       )}
     </form>

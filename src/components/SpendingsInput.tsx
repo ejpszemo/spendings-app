@@ -8,6 +8,7 @@ import type { Rates, Spending } from "../types";
 import type { Currency } from "../currencies";
 import AddIcon from "../assets/icons/add.svg?react";
 import RefreshIcon from "../assets/icons/refresh.svg?react";
+import Button from "./ui/Button";
 
 function SpendingsInput({
   spendings,
@@ -65,12 +66,12 @@ function SpendingsInput({
     } catch (error) {
       console.error("Error adding spending:", error);
       alert(
-        "Exchange rate not available. Please change currency and try again."
+        "Exchange rate not available. Please change currency and try again.",
       );
     }
   };
   const handleSpendingCurrencyChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newCurrency = e.target.value as Currency;
     setSelectedSpendingCurrency(newCurrency);
@@ -94,7 +95,7 @@ function SpendingsInput({
     }
 
     const exchangeRate = rates.find(
-      (rate) => rate.base === selectedSpendingCurrency
+      (rate) => rate.base === selectedSpendingCurrency,
     )?.exchangeRates[targetCurrency];
 
     if (!exchangeRate) {
@@ -120,7 +121,7 @@ function SpendingsInput({
 
   const getLastRatesUpdate = (): string => {
     const lastUpdate = rates.find(
-      (rate) => rate.base === selectedSpendingCurrency
+      (rate) => rate.base === selectedSpendingCurrency,
     )?.fetchedAt;
     return lastUpdate
       ? formatDate(new Date(lastUpdate), locale, "short", true, "medium")
@@ -132,15 +133,12 @@ function SpendingsInput({
       {selectedUserId ? (
         <>
           <div className="spendings-input-last-updated">
-            <button
-              className="spendings-input-mini-button"
-              onClick={handleRatesUpdate}
-            >
+            <Button variant="square-mini" onClick={handleRatesUpdate}>
               <RefreshIcon className="standard-mini-icon" />
-            </button>
+            </Button>
             <span className="spendings-input-last-updated-text">
               {t.spending.lastRatesUpdate(
-                selectedSpendingCurrency.toUpperCase()
+                selectedSpendingCurrency.toUpperCase(),
               )}{" "}
               {getLastRatesUpdate()}
             </span>
@@ -183,9 +181,9 @@ function SpendingsInput({
               onChange={(e) => setInputDate(e.target.value)}
               required
             />
-            <button type="submit">
+            <Button variant="square-default" type="submit">
               <AddIcon className="standard-icon" />
-            </button>
+            </Button>
           </form>
         </>
       ) : (

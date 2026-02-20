@@ -13,6 +13,7 @@ import ArrowUpIcon from "../assets/icons/arrow_drop_up.svg?react";
 import ArrowDownIcon from "../assets/icons/arrow_drop_down.svg?react";
 import SearchIcon from "../assets/icons/search.svg?react";
 import ClearInputIcon from "../assets/icons/clear_input.svg?react";
+import Button from "./ui/Button";
 
 function SpendingsList({
   spendings,
@@ -79,8 +80,8 @@ function SpendingsList({
               date: editDate,
               exchangedAmount: getExchangedAmount(spending.currency),
             }
-          : spending
-      )
+          : spending,
+      ),
     );
     setEditUser("");
     setEditInputValue("");
@@ -102,7 +103,7 @@ function SpendingsList({
     if (!confirm(t.spending.remove)) return;
 
     const filteredSpendings = spendings.filter(
-      (spending) => spending.id !== id
+      (spending) => spending.id !== id,
     );
     setSpendings(filteredSpendings);
   };
@@ -188,12 +189,12 @@ function SpendingsList({
             <ol>
               {searchResults // replaced plain 'spendings' here for search bar feature
                 .filter((spending) =>
-                  filterByUser ? spending.userId === selectedUserId : true
+                  filterByUser ? spending.userId === selectedUserId : true,
                 )
                 .filter((spending) =>
                   filterByCurrency
                     ? spending.currency === selectedSpendingCurrency
-                    : true
+                    : true,
                 )
                 .map((spending) => {
                   const userData = usersDataMemo.get(spending.userId);
@@ -245,18 +246,15 @@ function SpendingsList({
                             onChange={(e) => setEditDate(e.target.value)}
                           />
                           <div className="spendings-list-button-container">
-                            <button
-                              className="spendings-list-mini-button"
-                              type="submit"
-                            >
+                            <Button variant="square-mini" type="submit">
                               <SaveIcon className="standard-mini-icon" />
-                            </button>
-                            <button
-                              className="spendings-list-mini-button"
+                            </Button>
+                            <Button
+                              variant="square-mini"
                               onClick={() => handleCancelEditedSpending}
                             >
                               <CancelIcon className="standard-mini-icon" />
-                            </button>
+                            </Button>
                           </div>
                         </form>
                       ) : (
@@ -270,7 +268,7 @@ function SpendingsList({
                               title={formatCurrency(
                                 spending.exchangedAmount,
                                 currencyCode,
-                                currencyLocale
+                                currencyLocale,
                               )}
                               tabIndex={0}
                               style={
@@ -283,7 +281,7 @@ function SpendingsList({
                                 {formatCurrency(
                                   spending.amount,
                                   spending.currency,
-                                  localeMap[spending.currency]
+                                  localeMap[spending.currency],
                                 )}
                               </span>
                               <span className="spendings-list-amount-description">
@@ -295,18 +293,18 @@ function SpendingsList({
                             {formatDate(new Date(spending.date), locale)}
                           </span>
                           <div className="spendings-list-button-container">
-                            <button
-                              className="spendings-list-mini-button"
+                            <Button
+                              variant="square-mini"
                               onClick={() => handleEditSpending(spending.id)}
                             >
                               <EditIcon className="standard-mini-icon" />
-                            </button>
-                            <button
-                              className="spendings-list-mini-button"
+                            </Button>
+                            <Button
+                              variant="square-mini"
                               onClick={() => handleDeleteSpending(spending.id)}
                             >
                               <RemoveIcon className="standard-mini-icon" />
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       )}
@@ -316,7 +314,10 @@ function SpendingsList({
             </ol>
           </div>
           <div className="spendings-list-expand">
-            <button onClick={() => setExpanded((prev) => !prev)}>
+            <Button
+              variant="long-mini"
+              onClick={() => setExpanded((prev) => !prev)}
+            >
               {expanded ? (
                 <>
                   <ArrowUpIcon className="standard-mini-icon" />{" "}
@@ -328,7 +329,7 @@ function SpendingsList({
                   {t.spending.expand}
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </>
       )}

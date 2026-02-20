@@ -11,6 +11,7 @@ import type { Rates, Spending, User } from "../types";
 import ExportIcon from "../assets/icons/export.svg?react";
 import ImportIcon from "../assets/icons/import.svg?react";
 import ClearIcon from "../assets/icons/clear.svg?react";
+import Button from "./ui/Button";
 
 function GlobalActions({
   spendings,
@@ -35,7 +36,7 @@ function GlobalActions({
   const version = import.meta.env.VITE_APP_VERSION ?? "dev";
 
   const handleCurrencyChange = async (
-    e: React.ChangeEvent<HTMLSelectElement>
+    e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const newCurrency = e.target.value as Currency;
     setCurrency(newCurrency);
@@ -50,7 +51,7 @@ function GlobalActions({
         } catch (error) {
           console.error(
             `Failed to exchange amount for spending ${spending.id}:`,
-            error
+            error,
           );
           // Return spending with 0 as fallback
           return {
@@ -68,7 +69,7 @@ function GlobalActions({
   };
   const getExchangeAmount = (
     spending: Spending,
-    newCurrency: Currency
+    newCurrency: Currency,
   ): number => {
     if (spending.currency === newCurrency) {
       return spending.amount;
@@ -116,7 +117,7 @@ function GlobalActions({
   };
 
   const handleImportData = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const importedData = await importFromJSON(event);
 
@@ -135,17 +136,17 @@ function GlobalActions({
           try {
             // Get all unique currencies from imported spendings
             const uniqueCurrencies = Array.from(
-              new Set(spendings.map((s: Spending) => s.currency))
+              new Set(spendings.map((s: Spending) => s.currency)),
             ) as Currency[];
 
             // Find currencies we don't have rates for yet
             const missingCurrencies = uniqueCurrencies.filter(
-              (curr) => !rates.find((rate) => rate.base === curr)
+              (curr) => !rates.find((rate) => rate.base === curr),
             );
 
             // Fetch all missing rates in parallel
             const newRates = await Promise.all(
-              missingCurrencies.map((curr) => fetchCurrencyRates(curr))
+              missingCurrencies.map((curr) => fetchCurrencyRates(curr)),
             );
 
             // Merge with existing rates
@@ -159,13 +160,13 @@ function GlobalActions({
                 }
 
                 const spendingRate = allRates.find(
-                  (r) => r.base === spending.currency
+                  (r) => r.base === spending.currency,
                 );
                 const exchangeRate = spendingRate?.exchangeRates[currency];
 
                 if (!exchangeRate) {
                   console.warn(
-                    `No exchange rate found for ${spending.currency} to ${currency}`
+                    `No exchange rate found for ${spending.currency} to ${currency}`,
                   );
                   return { ...spending, exchangedAmount: 0 };
                 }
@@ -177,7 +178,7 @@ function GlobalActions({
               } catch (error) {
                 console.error(
                   `Error calculating exchange for spending ${spending.id}:`,
-                  error
+                  error,
                 );
                 return { ...spending, exchangedAmount: 0 };
               }
@@ -191,12 +192,12 @@ function GlobalActions({
           } catch (error) {
             console.error(
               "Failed to fetch exchange rates for imported spendings:",
-              error
+              error,
             );
             // Still import the spendings, even if some exchange rates fail
             setSpendings(spendings);
             alert(
-              "Imported data successfully, but some exchange rates may be unavailable. You can update them manually."
+              "Imported data successfully, but some exchange rates may be unavailable. You can update them manually.",
             );
           }
         }
@@ -211,12 +212,9 @@ function GlobalActions({
     <div className="global-actions-container">
       <div className="global-actions-tag">{version}</div>
       <div className="global-actions-data-ops">
-        <button
-          className="global-actions-mini-button"
-          onClick={handleExportData}
-        >
+        <Button variant="long-mini" onClick={handleExportData}>
           <ExportIcon className="standard-mini-icon" /> {t.app.exportData}
-        </button>
+        </Button>
         <label htmlFor="file-upload" className="global-actions-input-label">
           <input
             id="file-upload"
@@ -226,12 +224,9 @@ function GlobalActions({
           />
           <ImportIcon className="standard-mini-icon" /> {t.app.importData}
         </label>
-        <button
-          className="global-actions-mini-button"
-          onClick={handleClearSpendings}
-        >
+        <Button variant="long-mini" onClick={handleClearSpendings}>
           <ClearIcon className="standard-mini-icon" /> {t.app.clearData}
-        </button>
+        </Button>
       </div>
       <div className="global-actions-contexts">
         <div className="global-actions-contexts-selector">
