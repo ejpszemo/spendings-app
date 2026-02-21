@@ -15,6 +15,7 @@ import SearchIcon from "../assets/icons/search.svg?react";
 import ClearInputIcon from "../assets/icons/clear_input.svg?react";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import Checkbox from "./ui/Checkbox";
 
 function SpendingsList({
   spendings,
@@ -155,25 +156,16 @@ function SpendingsList({
             }
           >
             <div className="spendings-list-filters">
-              <label className="spendings-list-filter-label">
-                <Input
-                  variant="none"
-                  type="checkbox"
-                  checked={filterByUser}
-                  onChange={(e) => setFilterByUser(e.target.checked)}
-                />
-                <span className="spendings-list-filter-checkmark"></span>
-                {t.spending.filterByUser}
-              </label>
-              <label className="spendings-list-filter-label">
-                <input
-                  type="checkbox"
-                  checked={filterByCurrency}
-                  onChange={(e) => setFilterByCurrency(e.target.checked)}
-                />
-                <span className="spendings-list-filter-checkmark"></span>
-                {t.spending.filterByCurrency}
-              </label>
+              <Checkbox
+                checked={filterByUser}
+                onChange={(e) => setFilterByUser(e.target.checked)}
+                label={t.spending.filterByUser}
+              />
+              <Checkbox
+                checked={filterByCurrency}
+                onChange={(e) => setFilterByCurrency(e.target.checked)}
+                label={t.spending.filterByCurrency}
+              />
             </div>
             <div className="spendings-list-search-bar">
               <SearchIcon className="standard-icon" />

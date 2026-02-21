@@ -5,8 +5,7 @@ type InputVariant =
   | "short-default"
   | "short-mini"
   | "long-default"
-  | "long-mini"
-  | "none"; // used for checkboxes
+  | "long-mini";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant: InputVariant;
