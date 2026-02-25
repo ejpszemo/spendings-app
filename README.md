@@ -1,143 +1,56 @@
-# 💰 Spendings App Revamped
+# Spendings App
 
-A modern, responsive expense tracking application built with React and TypeScript. Track spendings across multiple users with an intuitive Material UI-inspired interface, multi-language support, multi-currency support, data export/import capabilities, and persistent storage.
+A modern, responsive **expense tracking web app** built with **React** and **TypeScript** for managing personal spendings directly in your browser. Data is stored locally — for now.
 
-## ✨ Features
+## 🚀 Key Features
 
-### Core Functionality
+**Multi-User Support**: Track spendings for multiple users, each with their own color code.
 
-- **Multi-User Support**: Create and manage multiple users with color-coded identification
-- **Expense Tracking**: Add, edit, and delete spending entries with amounts and descriptions
-- **Mixed Currency Support**: Each spending entry can have its own currency
-- **Real-Time Currency Conversion**: Automatic exchange rate fetching and conversion via API
-- **Smart Filtering**: Filter spendings by user and currency to see specific expense histories
-- **Search Bar**: Easily search expenses by their descriptions
-- **Summary Dashboard**: View total spendings per user with automatic currency conversions
-- **Data Persistence**: All data automatically saved to browser's localStorage
-- **Export/Import**: Export and import both spendings and users data in JSON format
+**Expense Management**: Add, edit, and delete spendings with amounts, descriptions, and dates.
 
-### Internationalization & Localization
+**Currency & Conversion**: Supports multiple currencies with automatic exchange rate fetching for seamless conversion.
 
-- **Multi-Language Support**: Switch between English and Polish
-- **Multi-Currency Support**: Choose from USD, EUR, GBP, PLN, CZK, CHF, JPY, CAD, AUD, NZD, SEK, or NOK
-- **Dual Currency System**:
-  - Global display currency for viewing totals
-  - Individual spending currency for each entry
-- **Live Exchange Rates**: Automatic fetching of current exchange rates from external API
-- **Localized Formatting**: Date and currency formats adapt to selected settings
-- **Independent Settings**: Language and currency can be changed independently
-- **Seamless Switching**: All preferences persist across sessions
+**Filtering & Search**: Filter expenses by user, currency, or search term to quickly find what matters.
 
-### Design & Styling
+**Export / Import JSON**: Save or load your data in JSON format for backup or transfer between devices.
 
-- **Material UI-Inspired Design**: Unified, professional design system inspired by Material UI
-- **Custom Color Palette**: Carefully crafted color scheme with primary, secondary, and elevated states
-- **SVG Icon System**: Clean, scalable vector icons loaded as React components via vite-plugin-svgr
-- **Themes**: Support for switching between light and dark themes
+**Internationalization**: Switch between English and Polish UI — plus localized date & currency formatting.
 
-### User Experience
+## 🛠 Tech Stack
 
-- **Color-Coded Users**: Each user has a unique color for easy identification
-- **Inline Editing**: Edit expenses directly in the list view with keyboard support
-- **Date Display**: Human-readable date formats based on language locale
-- **Dual Currency Display**: See both original and converted amounts (hover tooltip)
-- **Currency Filtering**: Filter view by specific currency
-- **Description searching**: Find a specific expense using the search bar
-- **Smart Error Handling**: Graceful handling of API failures with user feedback
-- **Responsive Design**: Modern, clean interface that works on all devices
-- **Mobile-Optimized**: Flex-direction adjustments, collapsible spendings list, and optimized layouts for mobile devices
+- React & TypeScript
+- Vite (dev/build tooling)
+- LocalStorage for persistence
+- Intl & Currency APIs for formatting & rates
+- Modern CSS + Material UI design cues
 
-## 🚀 Tech Stack
+## 💱 Exchange Rates
 
-- **React 19** - Modern React with hooks
-- **TypeScript** - Type-safe development
-- **Vite** - Lightning-fast build tool
-- **vite-plugin-svgr** - SVG imports as React components
-- **Context API** - State management for language, translations, and currency
-- **LocalStorage** - Client-side data persistence
-- **CSS3** - Custom styling with modern CSS features (Material UI-inspired design)
-- **Intl API** - Native internationalization and currency formatting
-- **Currency API** - Real-time exchange rates from Vercel-hosted API
+Currency conversion is powered by [UniRateAPI](https://api.unirateapi.com/).
 
-## 🎯 Usage
+Exchange rates are fetched on demand and cached in the application state.
 
-### Adding Users
+## 🌍 Live Demo
 
-1. Enter a user name in the "User Name" field
-2. Click "Add User" or press Enter
-3. Select the user from the dropdown to track their expenses
+The application is hosted on GitHub Pages and available here:
 
-### Adding Expenses
+👉 https://ejpszemo.github.io/spendings-app/
 
-1. Select a user from the dropdown
-2. Choose the currency for this specific expense
-3. Enter the amount and description
-4. Click "Add Spending" or press Enter
-5. The app automatically fetches exchange rates and converts to your display currency
+## 📁 Data Persistence
 
-### Managing Expenses
+All data is stored in the browser’s LocalStorage — clearing browser data will remove your spendings and users.
 
-- **Edit**: Click the edit icon button to edit an expense, then save icon to save (or press Enter)
-- **Delete**: Click the delete icon button to remove an expense
-- **Filter by User**: Check "Filter by user" to see only the selected user's expenses
-- **Filter by Currency**: Check "Filter by currency" to see only expenses in a specific currency
-- **Search**: Start typing to find what you're looking for
-- **View Conversions**: Hover over any amount to see the converted value in your display currency
-- **Expand/Collapse List**: Use the expand/collapse button to show or hide the spendings list
+## 🔜 In Progress
 
-### Changing Settings
+- UI Standarization
+- Raw text import function
+- Cloud storage / synchronization between devices
+- Function to download the resulting table as an image ready to send
 
-- **Language**: Use the language selector at the top to switch between English and Polski (Polish)
-- **Theme**: Use the theme selector to switch between light and dark themes
-- **Display Currency**: Use the global currency selector to set your preferred viewing currency
-  - All spending totals automatically convert to this currency
-  - Individual spending amounts show in their original currency
-- **Spending Currency**: Each expense can be added in any currency independently
-- All preferences are saved automatically and persist across sessions
+## 📝 License
 
-### Managing Data
-
-- **Export Data**: Export both spendings and users to a JSON file for backup or transfer
-- **Import Data**: Import previously exported data back into the app
-  - Automatically fetches missing exchange rates upon import
-  - Seamlessly restores all your spendings and users
-- **Clear All Data**: Click the clear icon button in the top right to clear all local data
-  - This removes all spendings, users, settings, and cached exchange rates
-  - A confirmation dialog will appear before clearing
-  - It may come in handy if I mess things up between commits
-  - This action cannot be undone
-
-## 📝 TODO / Future Enhancements
-
-### High Priority
-
-- [x] **Mixed Currency Support**: Allow each spending entry to have its own currency with automatic conversion rates ✅
-- [x] **Currency Conversion**: Real-time exchange rates and automatic currency conversion in summary view ✅
-- [x] **Export/Import Functionality**: Export and import data in JSON format with automatic exchange rate fetching ✅
-
-### Medium Priority
-
-- [ ] **Charts and Visualizations**: Add pie charts and graphs for spending analysis
-- [x] **Date selector**: Choose a specific date when adding an expense ✅
-- [x] **Search Functionality**: Search expenses by description, amount, or date ✅
-- [x] **UI Enhancements**: Improved accessibility and unified Material UI-inspired design with SVG icons ✅
-
-### Low Priority
-
-- [x] **Dark Mode Theme**: Add dark/light theme toggle ✅
-- [ ] **More Languages**: Support for additional languages (Spanish, French, German, etc.)
-- [x] **More Currencies**: Support for additional currencies ✅
-- [ ] **Cloud Sync**: Backend integration for data synchronization across devices
-- [ ] **Mobile App**: Native mobile app version (React Native)
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE)
 
 ## 👤 Author
 
-ejpszemo - [@ejpszemo](https://github.com/ejpszemo)
-
----
-
-**Note**: All data is stored locally in your browser using localStorage. Use the Clear data button to clear app data, or clearing your browser data will also erase all spendings and users.
+[@ejpszemo](https://github.com/ejpszemo)
